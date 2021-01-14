@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
         print(merged_datasus[['SG_UF', 'ID_MUNICIP']].head(10))
 
-        merg
+        merged
 
         merged_datasus.to_csv(path_or_buf=csvfile, index=False)
 
