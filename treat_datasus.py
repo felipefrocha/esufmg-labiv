@@ -3,9 +3,14 @@ import numpy as np
 import os
 import csv
 from unidecode import unidecode
+import  dateparser
 
 datasus_path = os.getcwd()
 
+OBITO = 1
+NAO_OBITO=0
+CURA = 1
+IGNORADO = 9
 
 def read_db_file_csv(path):
     dataframe = None
@@ -50,6 +55,9 @@ def read_csv_uf():
 #     for dataframe in new_datasus:
 #         reformat_datasus.append(reference.difference(datasus_columns))
 
+def date_format(date_string):
+    return dateparser.parse( date_string='12/10/12', date_formats=['%d/%m/%y'] )
+
 
 if __name__ == "__main__":
     with open(file=f'{datasus_path}/consolidated_datasus.csv', mode='w', newline='') as csvfile:
@@ -58,6 +66,13 @@ if __name__ == "__main__":
         files.sort()
         print(files)
         new_datasus = [read_db_file_csv(f'{datasus_path}/data/datasus/{sus_file}') for sus_file in files]
+
+        [data_base.rename(columns={'DT_OBITO': 'DT_EVOLUCA'}, inplace=True ) for data_base in new_datasus]
+
+        new_datasus = [data_base['EVOLUCAO'].apply(lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO)
+         for data_base in new_datasus]
+        new_datasus['TMP_ATE_OBITO'] = new_datasus.apply(lambda row: (date_format(row['DT_EVOLUCAO']) - date_format(row['DT_INTERNA']) if row['EVOLUCAO'] == 1 else None))
+
 
         reformat_datasus = []
 
@@ -113,6 +128,7 @@ if __name__ == "__main__":
             "PNEUMOPATI",
             "HOSPITAL",
             "DT_INTERNA",
+            "DT_EVOLUCA",
             "CLASSI_OUT",
             "CRITERIO",
             "TPAUTOCTO",
