@@ -1,2 +1,3 @@
 FROM python:3.8
-RUN python -m pip install pandas numpy matplotlib unidecode
+COPY requirements.txt .
+RUN python -m pip install requirements.txt

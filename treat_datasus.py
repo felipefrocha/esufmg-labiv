@@ -89,6 +89,7 @@ if __name__ == "__main__":
             print(f'Size merged {len(merged_datasus)} Index file {i}')
             print('')
 
+
         print(f'Colunas {merged_datasus.columns}')
         print(f'Tamanho do banco do SUS: {len(merged_datasus)}')
         print(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
@@ -100,6 +101,39 @@ if __name__ == "__main__":
         print(cod_municipio.head(10))
         print(cod_uf.head(10))
 
+        merged_status = merged_datasus[[
+            "DT_NOTIFIC",
+            "ID_MUNICIP",
+            "SG_UF_NOT",
+            "CS_SEXO",
+            "CS_GESTANT",
+            "CS_RACA",
+            "CS_ESCOL_N",
+            "SG_UF",
+            "PNEUMOPATI",
+            "HOSPITAL",
+            "DT_INTERNA",
+            "CLASSI_OUT",
+            "CRITERIO",
+            "TPAUTOCTO",
+            "DOENCA_TRA",
+            "EVOLUCAO",
+            "MONITORA",
+            "OBES_IMC",
+            "OUT_AMOST",
+            "DS_OAGEETI",
+            "DS_OUTMET",
+            "DS_OUTSUB",
+            "OUT_ANTIV",
+            "RES_ADNO",
+            "AMOSTRA",
+            "SIND_DOWN",
+            "UTI",
+            "ST_TIPOFI",
+            "ANTIVIRAL",
+            "SUPORT_VEN",
+        ]]
+
         merged_datasus['SG_UF'].replace(dict(zip(cod_uf.cod_uf, cod_uf.sg_uf)), inplace=True)
         merged_datasus['ID_MUNICIP'].replace(dict(zip(cod_municipio.cod_municipio, cod_municipio.nome_municipio)),
                                              inplace=True)
@@ -109,9 +143,8 @@ if __name__ == "__main__":
 
         print(merged_datasus[['SG_UF', 'ID_MUNICIP']].head(10))
 
-        merged
-
         merged_datasus.to_csv(path_or_buf=csvfile, index=False)
 
+        print("FINISH")
     # with open(file=f'{os.getcwd()}/headers19') as headers:
     #     read = (headers)
