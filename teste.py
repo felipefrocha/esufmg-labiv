@@ -5,37 +5,47 @@ Created on Tue Dec 22 20:45:01 2020
 @author: tiago
 """
 import numpy as np
-import csv
 from sklearn.preprocessing import OneHotEncoder
+from functools import reduce
 enc = OneHotEncoder(handle_unknown='ignore')
 
 
 import pandas as pd
-pd.options.display.float_format = "{:.2f}".format
 size = 10;
 ano_inicio = 2009
 teste2 = [0] * size
+pd.options.display.float_format = '{:,.0f}'.format
+colsEnum=['CS_RACA','CS_SEXO']
+dadosTratadas = []
 
-racasEnum = ['nulo','branca','preta','amarela','parda','indígena','ignorado']
-   
-orcamento_mg = pd.read_csv("data/datasus/influd09_limpo_final.csv",sep=';',encoding = "ISO-8859-1")
+dados = pd.read_csv("data/datasus/influd09_limpo_final.csv",sep=';',encoding = "ISO-8859-1")
+
+for num,col in enumerate(colsEnum, start=1):
+    enum = pd.read_csv("data/datasus/{}.csv".format(col),sep=';',encoding = "ISO-8859-1").columns
+    dadosIter = dados
+    enumTipo = dados[col]
+    dadosIter[col] = dadosIter[col].fillna(0)
+    dadosIter[col] = dadosIter[col].astype('category')
     
-racas = orcamento_mg['CS_RACA']
-orcamento_mg['CS_RACA'] = orcamento_mg['CS_RACA'].fillna(0)
-orcamento_mg['CS_RACA'] = orcamento_mg['CS_RACA'].astype('category')
+    
+    
+    enc_df = pd.DataFrame(enc.fit_transform(dadosIter[[col]]).toarray())
+    enc_df.columns = enum
+    dadosIter = dadosIter.join(enc_df)
+    
+    dicionario = dict([(i, ['sum'])for i in enum])
+    rnm_cols = dict(sum='Sum')
+    grouped_single = dadosIter.groupby(['ID_MUNICIP']).agg(dicionario).rename(columns=rnm_cols)
 
 
-
-enc_df = pd.DataFrame(enc.fit_transform(orcamento_mg[['CS_RACA']]).toarray())
-enc_df.columns = teste
-orcamento_mg = orcamento_mg.join(enc_df)
-grouped_single = orcamento_mg.groupby(['ID_MUNICIP']).agg({'branca': ['sum'],'preta':['sum']})
-rnm_cols = dict(sum='Sum')
-grouped_single = orcamento_mg.set_index(teste).stack().groupby('ID_MUNICIP').agg(rnm_cols.keys()).rename(columns=rnm_cols)
+    grouped_single.columns = enum 
+    dadosTratadas.append(grouped_single)
 
     
-       
+  
 
-
-result = pd.concat(teste2)
-result.to_csv(r'data/orcamento/orcamento_mg_consolidado.csv', index = False,sep=';')
+#horizontal_stack = pd.concat([survey_sub, survey_sub_last10], axis=1)
+df_final = reduce(lambda left,right: pd.merge(left,right,on='ID_MUNICIP'), dadosTratadas).astype(int)
+df_final.reset_index(level=0, inplace=True)
+#result = pd.concat(teste2)
+df_final.to_csv(r'data/datasus/dados_agrupados.csv', index = False,sep=';')
