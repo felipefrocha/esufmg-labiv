@@ -3,9 +3,14 @@ import numpy as np
 import os
 import csv
 from unidecode import unidecode
+import  dateparser
 
 datasus_path = os.getcwd()
 
+OBITO = 1
+NAO_OBITO=0
+CURA = 1
+IGNORADO = 9
 
 def read_db_file_csv(path):
     dataframe = None
@@ -50,6 +55,9 @@ def read_csv_uf():
 #     for dataframe in new_datasus:
 #         reformat_datasus.append(reference.difference(datasus_columns))
 
+def date_format(date_string):
+    return dateparser.parse( date_string='12/10/12', date_formats=['%d/%m/%y'] )
+
 
 if __name__ == "__main__":
     with open(file=f'{datasus_path}/consolidated_datasus.csv', mode='w', newline='') as csvfile:
@@ -58,6 +66,13 @@ if __name__ == "__main__":
         files.sort()
         print(files)
         new_datasus = [read_db_file_csv(f'{datasus_path}/data/datasus/{sus_file}') for sus_file in files]
+
+        [data_base.rename(columns={'DT_OBITO': 'DT_EVOLUCA'}, inplace=True ) for data_base in new_datasus]
+
+        new_datasus = [data_base['EVOLUCAO'].apply(lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO)
+         for data_base in new_datasus]
+        new_datasus['TMP_ATE_OBITO'] = new_datasus.apply(lambda row: (date_format(row['DT_EVOLUCAO']) - date_format(row['DT_INTERNA']) if row['EVOLUCAO'] == 1 else None))
+
 
         reformat_datasus = []
 
@@ -89,6 +104,7 @@ if __name__ == "__main__":
             print(f'Size merged {len(merged_datasus)} Index file {i}')
             print('')
 
+
         print(f'Colunas {merged_datasus.columns}')
         print(f'Tamanho do banco do SUS: {len(merged_datasus)}')
         print(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
@@ -100,6 +116,40 @@ if __name__ == "__main__":
         print(cod_municipio.head(10))
         print(cod_uf.head(10))
 
+        merged_status = merged_datasus[[
+            "DT_NOTIFIC",
+            "ID_MUNICIP",
+            "SG_UF_NOT",
+            "CS_SEXO",
+            "CS_GESTANT",
+            "CS_RACA",
+            "CS_ESCOL_N",
+            "SG_UF",
+            "PNEUMOPATI",
+            "HOSPITAL",
+            "DT_INTERNA",
+            "DT_EVOLUCA",
+            "CLASSI_OUT",
+            "CRITERIO",
+            "TPAUTOCTO",
+            "DOENCA_TRA",
+            "EVOLUCAO",
+            "MONITORA",
+            "OBES_IMC",
+            "OUT_AMOST",
+            "DS_OAGEETI",
+            "DS_OUTMET",
+            "DS_OUTSUB",
+            "OUT_ANTIV",
+            "RES_ADNO",
+            "AMOSTRA",
+            "SIND_DOWN",
+            "UTI",
+            "ST_TIPOFI",
+            "ANTIVIRAL",
+            "SUPORT_VEN",
+        ]]
+
         merged_datasus['SG_UF'].replace(dict(zip(cod_uf.cod_uf, cod_uf.sg_uf)), inplace=True)
         merged_datasus['ID_MUNICIP'].replace(dict(zip(cod_municipio.cod_municipio, cod_municipio.nome_municipio)),
                                              inplace=True)
@@ -109,9 +159,8 @@ if __name__ == "__main__":
 
         print(merged_datasus[['SG_UF', 'ID_MUNICIP']].head(10))
 
-        merged
-
         merged_datasus.to_csv(path_or_buf=csvfile, index=False)
 
+        print("FINISH")
     # with open(file=f'{os.getcwd()}/headers19') as headers:
     #     read = (headers)
