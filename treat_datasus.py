@@ -1,10 +1,9 @@
 import csv
 import os
+from datetime import date
 
-import dateparser
 import pandas as pd
 from unidecode import unidecode
-from datetime import date
 
 datasus_path = os.getcwd()
 
@@ -57,7 +56,7 @@ def read_csv_uf():
 #     for dataframe in new_datasus:
 #         reformat_datasus.append(reference.difference(datasus_columns))
 
-def sep_day(data):
+def sep_date(data):
     x = data.split( sep='/' )
     day = int( x[0] )
     month = int( x[1] )
@@ -65,11 +64,12 @@ def sep_day(data):
     return date( year, month, day )
 
 
-
-
-def sub_data(txt,txt2):
-    d0 = sep_day(str(txt))
-    d1 = sep_day(str(txt2))
+def sub_date(txt, txt2):
+    try:
+        d0 = sep_date( txt )
+        d1 = sep_date( txt2 )
+    except:
+        return 0
     delta = d1 - d0
     return delta.days
 
@@ -82,13 +82,14 @@ if __name__ == "__main__":
         files.sort()
         print( files )
 
-        new_datasus = [read_db_file_csv( f'{datasus_path}/data/datasus/{sus_file}') for sus_file in files]
+        new_datasus = [read_db_file_csv( f'{datasus_path}/data/datasus/{sus_file}' ) for sus_file in files]
 
         new_datasus = [data_base.rename( columns={'DT_OBITO': 'DT_EVOLUCA'} ) for data_base in new_datasus]
 
-        for idx, data_base in enumerate(new_datasus):
-            data_base['EVOLUCAO'] = data_base['EVOLUCAO'].apply(lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO)
-            new_datasus[idx-1] = data_base
+        for idx, data_base in enumerate( new_datasus ):
+            data_base['EVOLUCAO'] = data_base['EVOLUCAO'].apply(
+                lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO )
+            new_datasus[idx - 1] = data_base
 
         reformat_datasus = []
 
@@ -130,14 +131,13 @@ if __name__ == "__main__":
 
         print( cod_municipio.head( 10 ) )
         print( cod_uf.head( 10 ) )
-
         merged_datasus = merged_datasus[[
             "DT_NOTIFIC",
             "ID_MUNICIP",
             "SG_UF_NOT",
             "CS_SEXO",
-            "CS_GESTANT",
             "CS_RACA",
+            "CS_GESTANT",
             "CS_ESCOL_N",
             "PNEUMOPATI",
             "HOSPITAL",
@@ -156,19 +156,34 @@ if __name__ == "__main__":
         merged_datasus['ID_MUNICIP'].replace( dict( zip( cod_municipio.cod_municipio, cod_municipio.nome_municipio ) ),
                                               inplace=True )
 
-
-
         merged_datasus['DT_NOTIFIC'] = merged_datasus['DT_NOTIFIC'].apply(
             lambda x: str( x )[3:] )
 
         merged_datasus['TMP_ATE_OBITO'] = merged_datasus.apply( lambda row: (
-            sub_data(row['DT_INTERNA'], row['DT_EVOLUCA']) if row['EVOLUCAO'] == 1 and row['DT_EVOLUCA']  else None), axis=1)
-
-
+            sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
+                                                                axis=1 )
 
         print( merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head( 10 ) )
 
-        merged_datasus.to_csv( path_or_buf=csvfile, index=False )
+        merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
+        merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
+        merged_datasus.head()
+        print( len( merged_datasus ) )
+        # merged_datasus.to_csv( path_or_buf=csvfile, index=False )
+        teste = merged_datasus.groupby( by=[
+            "DT_NOTIFIC",
+            "ID_MUNICIP",
+            "SG_UF_NOT",
+            "CS_SEXO",
+            "CS_RACA",
+            "CS_GESTANT",
+        ], dropna=False ).agg(
+            {'DT_NOTIFIC': ['count'], 'CS_RACA': ['count'], 'CS_SEXO': ['count'], 'EVOLUCAO': ['sum'],
+             'TMP_ATE_OBITO': ['mean']} ).sort_index()
+
+        teste.to_csv( path_or_buf=csvfile, index=True )
+
+        print( teste )
 
         print( "FINISH" )
     # with open(file=f'{os.getcwd()}/headers19') as headers:
