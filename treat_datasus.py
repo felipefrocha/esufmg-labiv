@@ -13,6 +13,10 @@ CURA = 1
 IGNORADO = 9
 
 
+
+
+
+
 def read_db_file_csv(path):
     dataframe = None
     with open( file=path, encoding='ISO-8859-1' ) as datasus_csv:
@@ -149,7 +153,7 @@ if __name__ == "__main__":
             "UTI",
         ]]
 
-        merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
+        # merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
 
         merged_datasus['SG_UF_NOT'].replace( dict( zip( cod_uf.cod_uf, cod_uf.sg_uf ) ), inplace=True )
 
