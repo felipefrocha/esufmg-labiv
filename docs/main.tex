@@ -33,10 +33,6 @@
 \IEEEauthorblockA{\textit{2015096117} 
 feliperocha@ufmg.br\\}
 \and
-\IEEEauthorblockN{Isaac Henrique Simões}
-\IEEEauthorblockA{\textit{2015435713} 
-caasihenrique@ufmg.br\\}
-\and
 \IEEEauthorblockN{Renata M. R. Nésio}
 \IEEEauthorblockA{\textit{2014140418} 
 renatanesio@ufmg.br\\}
@@ -57,11 +53,12 @@ lobat@ufmg.br}}
 %RESUMO
 \begin{abstract}
 
-A Ogranização Mundal da Saúde (OMS) junto a governos de diversos países
+A Organização Mundial da Saúde (OMS) junto a governos de diversos países lançou a Aliança Global contra Doenças Respiratórias (GARD) em 2006. Neste trabalho, objetiva-se correlacionar mortes causadas por doenças agudas respiratórias registradas no SUS com o valor orçamentário direcionado ao setor de doenças respiratórias do Sistema. Através de um repositório público, os dados, as análises e as informações obtidas serão disponibilizadas, proporcionando maior auditabilidade.
 \end{abstract}
 
+
 \begin{IEEEkeywords}
-análise de dados temporal, doenças respiratórias, distribuição econômica, .
+Palavras-chave: análise de dados temporal, doenças respiratórias, distribuição econômica.
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
@@ -118,7 +115,6 @@ O problema é a inexistência de uma apresentação dos dados do sistema de saú
 \subsection{Equipe}
 \begin{itemize}
     \item Felipe Fonseca Rocha
-    \item Isaac Henrique Simões
     \item Renata Nésio
     \item Tiago Lobato Mansur
 \end{itemize}
@@ -132,12 +128,6 @@ O problema é a inexistência de uma apresentação dos dados do sistema de saú
      \item DevOps e infraestrutura
      \item Arquitetura de Software
    \end{itemize}
-
-    \item Isaac Henrique Simões
-    \begin{itemize}
-        \item Análise de dados
-        \item Modelagem de matemática
-    \end{itemize}
 
     \item Renata Nésio
    \begin{itemize}
@@ -164,11 +154,6 @@ O problema é a inexistência de uma apresentação dos dados do sistema de saú
      \item Extração e limpeza dos dados
      \item Gerenciamento do repositório
      \item Automação de tarefas 
-   \end{itemize}
-   
-   \item Isaac Henrique Simões
-   \begin{itemize}
-       \item Codificação
    \end{itemize}
    
     \item Renata Nésio
@@ -223,19 +208,19 @@ As emissões gasosas e de material particulado para a atmosfera derivam principa
 
 Alguns estudos evidenciam que a associação entre altas temperaturas e elevadas concentrações de poluentes  atmosféricos  pode  gerar  um  incremento  das  hospitalizações,  atendimentos  de  emergência,  consumo de medicamentos e taxas de mortalidade \cite{mudanças}.
 
-Outro ponto importante que deve ser levado em conta para diminuir as mortes por doenças respiratórias é o investimento do governo tanto na prevenção quanto no tratamento.\cite{mudanças}.
+Outro ponto importante que deve ser levado em conta para diminuir as mortes por doenças respiratórias é o investimento do governo tanto na prevenção quanto no tratamento.\cite{campanha_vacinais}.
 
-Para podermos entender quais medidas podem ser tomadas para reduzir o número de doenças respiratórias temos como exemplo o estudo que compara a mortalidade por doenças respiratórias em idosos após campanhas vacinais contra influenza no Distrito Federa. Nesse estudo foi feito uma análise da mortalidade por doenças respiratórias de três faixas estarias diferentes, 60 à 69 anos,70 à 79 anos e 80 anos ou mais. Os resultados mostraram uma diminuição na mortalidade para cada 1000 habitantes significativa, principalmente na faixa etária mais velha, com o índice passando de 30\% para 20\% de 1996 para 2000. Isso demonstra a importância de medidas preventivas para combater essas doenças, e a importância também de realizar um estudo de dados para saber o impacto das medidas que foram realizadas.     \cite{mudanças}.
+Para podermos entender quais medidas podem ser tomadas para reduzir o número de doenças respiratórias temos como exemplo o estudo que compara a mortalidade por doenças respiratórias em idosos após campanhas vacinais contra influenza no Distrito Federa. Nesse estudo foi feito uma análise da mortalidade por doenças respiratórias de três faixas estarias diferentes, 60 à 69 anos,70 à 79 anos e 80 anos ou mais. Os resultados mostraram uma diminuição na mortalidade para cada 1000 habitantes significativa, principalmente na faixa etária mais velha, com o índice passando de 30 para 20 de 1996 para 2000. Isso demonstra a importância de medidas preventivas para combater essas doenças, e a importância também de realizar um estudo de dados para saber o impacto das medidas que foram realizadas.     \cite{campanha_vacinais}.
 
 
-\subsection{contribuição do projeto ao estado da arte}
-Este projeto não possui um estado da arte muito claro de referência, pois é o conjunto da integração de dados do SUS, orçamentos do governo, limpeza e combinação de banco de dados, aprendizado de maquina e pipeline de geração de resultados. \cite{mudanças}.
+\subsection{Contribuição do projeto ao estado da arte}
+Este projeto não possui um estado da arte muito claro de referência, pois é o conjunto da integração de dados do SUS, orçamentos do governo, limpeza e combinação de banco de dados, aprendizado de maquina e pipeline de geração de resultados. \cite{estado_arte}.
 
-Levando em consideração os dados do SUS, orçamentos do governo e aprendizado de maquina podemos considerar o estudo "Uso de Machine Learning para predição de pacientes de alto custo no Sistema Único de Saúde (SUS)". Mesmo não tratando de doenças respiratórias especificamente e não tendo um pipeline de geração de resultados este estudo representa em seu resultado grande parte do que buscamos atingir com o projeto, que é relacionar o orçamento do governo com as doenças respiratórias e identificar os principais atributos que influenciam nessa relação. \cite{mudanças}.
+Levando em consideração os dados do SUS, orçamentos do governo e aprendizado de maquina podemos considerar o estudo ``Uso de Machine Learning para predição de pacientes de alto custo no Sistema Único de Saúde (SUS)''. Mesmo não tratando de doenças respiratórias especificamente e não tendo um pipeline de geração de resultados este estudo representa em seu resultado grande parte do que buscamos atingir com o projeto, que é relacionar o orçamento do governo com as doenças respiratórias e identificar os principais atributos que influenciam nessa relação. \cite{estado_arte}.
 
-No estudo inicialmente é realizada a seleção, obtenção, exploração e processamento dos dados, criando assim um banco de dados pre-processado e pronto para a analise do aprendizado de maquina. Em seguida esses dados são utilizados em três algoritmos de aprendizado de máquina supervisionado para geração dos resultados. Após os resultados foi possível analisar quais fatores influenciam mais no alto custo do SUS.   \cite{mudanças}.
+No estudo inicialmente é realizada a seleção, obtenção, exploração e processamento dos dados, criando assim um banco de dados pre-processado e pronto para a análise do aprendizado de máquina. Em seguida esses dados são utilizados em três algoritmos de aprendizado de máquina supervisionado para geração dos resultados. Após os resultados foi possível analisar quais fatores influenciam mais no alto custo do SUS.   \cite{estado_arte}.
 
-Neste projeto a ideia é seguir a mesma linha de raciocínio do estudo citado, mas o foco será apenas em doenças respiratórias e na relação com o orçamento do governo. No entanto, a grande contribuição para o estado da arte é a criação de um Pipeline de desenvolvimento onde será possível analisar a relação de quaisquer dados mudando apenas      \cite{mudanças}.
+Neste projeto a ideia é seguir a mesma linha de raciocínio do estudo citado, mas o foco será apenas em doenças respiratórias e na relação com o orçamento do governo. No entanto, existem algumas contribuições relevantes para o estado da arte. Primeiramente é a acessibilidade dos dados que serão disponibilizados já tratados, de maneira clara e intuitiva, possibilitando que a população consiga entender facilmente os resultados da análise. Além disso sera criado um Pipeline de desenvolvimento onde será possível analisar a relação de quaisquer dados desejados mudando apenas o banco de dados e os atributos de análise envolvidos, possibilitando escalabilidade da solução.  \cite{estado_arte}.
 % ###################################3
 
 \section{Motivação} 
@@ -265,7 +250,7 @@ A ideia é habilitar e incentivar que a academia bem como seus alunos a exercita
 \section{Relevância do projeto}
 Existe uma diferença entre dados e informação. Dados podem estar disponíveis, mas se não há uma analise confiável e de qualidade a informação contida neles não está acessível.
 
-A partir do momento dados públicos estão disponibilizados pelo poder público é necessário que haja engajamento da população apta a tornar essa informação acessível para a população média. A informação acessível que habilita a população a fiscalizar e a intervir na forma como o governo conduz e distribuí sua riqueza.
+A partir do momento em que dados públicos estão disponibilizados pelo poder público é necessário que haja engajamento da população apta a tornar essa informação acessível para a população média. A informação acessível habilita a população a fiscalizar e a intervir na forma como o governo conduz e distribui sua riqueza.
 
 Dados brutos não apresentam qualquer relevância para sociedade, especialmente a dotada de menos ferramentas para avaliação desses. O potencial do trabalho uma vez que engajado um corpo técnico apto a analisar os dados e torna-los acessível é habilitar a população a melhor acompanhar a situação do país e de seus governantes.
 
@@ -298,7 +283,13 @@ Podem ser divididos em 2 grupos, sendo elas:
     \item Privado - Pesquisadores interessados nas propostas e métodos, bases geradas e artigos
     \end{itemize}
 \end{itemize}
-Considerando o baixo engajamento em causas não financeiramente 
+ 
+Considerando as entidades citadas acima podemos fazer a análise de viabilidade em três pontos, econômica, social e ambiental.
+\begin{itemize}
+    \item Econômica - O projeto tem mão de obra voluntária e é aberto a comunidade, e além disso utiliza de tecnologias gratuitas e open source no desenvolvimento. Os maiores custos estão envolvidos em hospedar a solução em um ambiente Cloud e que pode ser substituído por um ambiente local se necessário. Dessa forma o projeto é viável economicamente.
+    \item Social - Um dos objetivos do projeto é disponibilizar informação de forma acessível e simples para a população leiga e também disponibilizar uma metodologia para desenvolvimento de projetos similares com temáticas que agreguem informação para a sociedade. Dessa forma, fica claro que o projeto possui viabilidade social com impactos sociais bem definidos. 
+    \item Ambiental - O projeto não possui uma ligação direta com questões ambientais, por isso a viabilidade ambiental é irrelevante neste caso.
+\end{itemize}
 
 % \write18{wget https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png}
 % \includegraphics{PNG_transparency_demonstration_1.png}
