@@ -1,8 +1,14 @@
 \documentclass[journal]{IEEEtran}
 \usepackage{amsmath}
 \usepackage{graphicx}
+\usepackage{biblatex}
 
-\hyphenation{op-tical net-works semi-conduc-tor}
+\usepackage{biblatex}
+\addbibresource{referencias.bib} %Imports bibliography file
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
 
 \usepackage{hyperref}
 \hypersetup{
@@ -12,6 +18,10 @@
     urlcolor=cyan,
 }
 
+\usepackage[portuguese]{babel}
+\usepackage{hyphenat}
+ 
+ 
 \urlstyle{same}
 
 \begin{document}
@@ -19,19 +29,27 @@
 \title{Desenvolvimento de Projeto - Laboratório de Projetos VI}
 
 %AUTOR DO TRABALHO
-\author{Felipe~Fonseca~Rocha,~\IEEEmembership{Estudante,~UFMG~-~Engenharia~de~Sistemas,}
-%AGRADECIMENTOS
-\thanks{
-F. F. Rocha é aluno de Engenharia de Sistemas na Escola de Engenharia da UFMG,
-Belo Horizonte,MG, 31270-901 BRA e-mail: feliperocha@ufmg.br
-}
+\author{\IEEEauthorblockN{Felipe Fonseca Rocha}
+\IEEEauthorblockA{\textit{2015096117} 
+feliperocha@ufmg.br\\}
+\and
+\IEEEauthorblockN{Isaac Henrique Simões}
+\IEEEauthorblockA{\textit{2015435713} 
+caasihenrique@ufmg.br\\}
+\and
+\IEEEauthorblockN{Renata M. R. Nésio}
+\IEEEauthorblockA{\textit{2014140418} 
+renatanesio@ufmg.br\\}
+\and
+\IEEEauthorblockN{Tiago Lobato Mansur}
+\IEEEauthorblockA{\textit{2014016059} 
+lobat@ufmg.br}}
 
-\thanks{Artigo entregue em 2020; revisado a datar.}}
 
 %NEGRITO E RODAPES ETC
 \markboth{Desenvolvimento de Projeto - Laboratório de Projetos VI,~2º semestre 2020, No.~11,~Dezembro~2020}%
-{Shell \MakeLowercase{\textit{et al.}}: Modelagem de um problema prático simples e solução do problema de otimização
-aplicando técnicas e conceitos de otimização}
+% {Shell \MakeLowercase{\textit{et al.}}: Modelagem de um problema prático simples e solução do problema de otimização
+% aplicando técnicas e conceitos de otimização}
 
 %INSERE O TÍTULO
 \maketitle
@@ -39,729 +57,289 @@ aplicando técnicas e conceitos de otimização}
 %RESUMO
 \begin{abstract}
 
-O trabalho tem como principal objetivo integralizar o conteúdo ministrado em aula por meio de um problema de aplicação
-prática.
+A Ogranização Mundal da Saúde (OMS) junto a governos de diversos países
 \end{abstract}
 
 \begin{IEEEkeywords}
-PLI, otimização, minimizar custo, designição generalizada, simulated annealing.
+análise de dados temporal, doenças respiratórias, distribuição econômica, .
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
 
 \section{Introdução}
 
-\IEEEPARstart{O} {problema} de saúde é reconhecido pela ONU (Organização das Nações Unidas) e otimização de custos em grandes centros é dos tema de importância fundamental para o crescimento econômico\cite{lin2014}.
+\IEEEPARstart{A} {Organização} Mundial da Saúde (OMS) lançou a Aliança Global contra Doenças Respiratórias (GARD) em 2006 com o objetivo de reunir o conhecimento combinado de organizações, instituições e agências nacionais e internacionais para melhorar a vida de mais de um bilhão de pessoas afetadas por doenças crônicas e doenças respiratórias agudas\cite{firs}.
 
-%RODAPE DA INTRODUÇÃO
-\hfill Felipe Fonseca Rocha
+Em 2015 líderes mundiais adotaram a Agenda de Desenvolvimento Sustentável 2030 proposta pela Organização das Nações Unidas. O terceiro objetivo da Agenda é "garantir vidas saudáveis e promover o bem-estar para todos em todas as idades". A organização defende que a melhoria da saúde tirará as pessoas da pobreza e contribuirá substancialmente para o desenvolvimento da sustentabilidade.
+
+Também na Organização das Nações Unidas existe um esforço para dar importância a temas correlatos, sendo o terceiro objetivo de desenvolvimento sustentável, assegurar uma vida saudável e promover o bem-estar a todos em qualquer idade.
+
+A OMS define como doenças respiratórias as doenças ou infecções que ocorrem no trato respiratório, tanto das vias superiores,fossas nasais, faringe e laringe, como inferior, traqueia, os pulmões, os brônquios, os bronquíolos e os alvéolos pulmonares em que há a obstrução da circulação do ar.
+
+Apesar das infecções das vias respiratórias superiores, como por exemplo faringite e laringite, sejam muito recorrentes, mas raramente com risco  de vida, as infecções das vias respiratórias inferiores (IVRI) são responsáveis por doenças mais graves contribuindo para mortalidade por infecções respiratórias agudas (IRAs).
+
+As Síndrome Respiratória Aguda Grave (SRAG) são definidas quando o indivíduo hospitalizado com febre, mesmo que referida, acompanhada de tosse ou dor de garganta e que apresente dispneia ou saturação de O2 menor que 95\% ou desconforto respiratório ou que evoluiu para óbito por SRAG independente de internação \cite{definicao}.
+
+De acordo como a OMS, as IRAs estão entre as doenças infecciosas de maior índice de morbimortalidade em todo o mundo, afetando o público infantil e os mais idosos. Essas infecções são, geralmente causadas por vírus, podendo também ser causadas por bactérias.
+
+As doenças respiratórias na infância têm constituído a cada dia motivo de preocupação para os profissionais de saúde, dada a sua elevada morbidade, observada em termos mundiais, bem como a alta mortalidade que incide especialmente nos países do terceiro mundo. Segundo dados divulgados pela Organização Mundial da Saúde (OMS), cerca de 13 milhões de crianças menores de cinco anos morrem anualmente no mundo por doenças do aparelho respiratório e 95\% delas ocorrem nos países em desenvolvimento \cite{infantil}.
+
+Na faixa etária de seis meses aos três anos, as crianças têm de seis a nove infecções respiratórias agudas por ano, sendo que  cerca  de  10\%  delas  apresentam  mais  de  dez  quadros  ao  ano.  Entre  os  três  e  cinco  anos,  o  número  de  infecções  respiratórias cai para três a quatro por ano, e crianças acima dos cinco anos apresentam um a dois quadros por ano, como ocorre nos adultos. Esse é um comportamento fisiológico decorrente do desenvolvimento do sistema imunológico \cite{infeccao}.
+
+As doenças respiratórias são altamente contagiosas devido ao seu elevado potencial de propagação através da projeção de gotículas contaminadas durante a fala, espirro, tosse e bocejo.  O contato da mão com superfícies contaminadas e em seguida a auto inoculação com essa constitui a principal via de transmissão.
+
+A relevância da saúde das populações têm relação direta com a qualidade de vida dessa população \cite{sdgsonu}, bem como a sustentabilidade de atividades econômicas desenvolvidas, sem falar no impacto orçamentário para divisão de saúde pública, do tratamento de doenças respiratórias agudas, 5,9\% dos registos de internação do ano de 2019\cite{ansdoencarespiratoria} são dessa categoria de doença.
+
+Sabendo que algumas infecções respiratórias das vias aéreas superiores são causadas por vírus sazonais, mais frequentes no período frio em áreas de clima temperado e também no período de chuvas naquelas de clima tropical\cite{azevedo_santos_silva_olinda_santos_2017}, este trabalho busca correlacionar condições climáticas a casos de doenças respiratórias.
+
+Sabendo da necessidade de desenvolvimento contínuo de avaliação dos dados e a natureza efêmera de modelos pela rápida alteração do contexto em que são desenvolvidos, vide o último ano (2020). Precisamos encontrar métodos de atualização contínua desses modelos e também um controle de contexto (base de dados e parâmetros) utilizados durante a análise. Também é necessário que esse método comporte a gestão de complexidade inerente ao desenvolvimento de múltiplos modelos, onde provavelmente o modelo que descrevia a temporalidade e possíveis relações econômicas e meteorológicas das doenças respiratórias em 2019, não se aplica a 2020, sendo a COVID-19 um evento não mapeado anteriormente produzindo novos comportamentos entre os componentes do sistema modelado.
+
+% %RODAPE DA INTRODUÇÃO
+% \hfill Felipe Fonseca Rocha
  
-\hfill 11 de Dezembro de 2020
+% \hfill 11 de Dezembro de 2020
 
 \section{Proposta}
 
 \subsection{Objetivos}
 
-\emph{Utilizar} uma esteira automatizada de processamento de dados (conhecido como \emph{MLOps}) de saúde pública afim de entender a distribuição temporal de doenças respiratórias em perspectivas geoclimáticas e socio-econômicas.
+\emph{Utilizar} uma metodologia de processamento de dados automatizado (conhecido como \emph{MLOps}) para dados em saúde pública afim de entender a distribuição temporal de doenças respiratórias agudas sob perspectivas geoclimáticas com dados encontrados no Banco de Dados Meteorológicos do Instituto Nacional de Meteorologia\cite{bdmep_2020} e socioeconômicas, com dados extraídos do Portal de Transparência do Governo Federal \cite{PortalTransparência2020}.
 
 \subsubsection{Gerais}
-O projeto busca produzir um artefato de software ou uma plataforma automatizada de processamento de dados de saúde pública advindo da base de dados do SUS disponibilizada na \url{http://dados.gov.br}
+O projeto busca produzir um artefato de software ou uma plataforma automatizada de processamento de dados de saúde pública advindo da base de dados do SUS disponibilizada no Portal Brasileiro de Dados Abertos\cite{DadosGov}.
+
+
 \subsubsection{Específicos}
-Busca se encontrar uma forma de transformar dados públicos em informação de baixo ou nenhum custo a população viabilizando seu acesso através de uma plataforma de alta disponibilidade aplicando as melhores práticas na esteira de processamento e tratamento dos dados diretos de banco.
+Busca-se encontrar uma forma de transformar dados públicos em informação de baixo ou nenhum custo à população viabilizando seu acesso através de uma plataforma de alta disponibilidade aplicando as melhores práticas na esteira de processamento e tratamento dos dados diretos de banco.
 \subsection{Originalidade do Projeto}
-O projeto prima pela disponibilidade de um artefato para que qualquer cidadão em posse de um determinado dado possa então processa-lo e com isso obter informações e interpreta-la sem que um conhecimento de programação seja exigido.
+Atualmente existe uma grande volume de dados disponíveis sobre o sistema de saúde brasileiro. Saber como encontrá-los, o que procurar e como interpretá-los, no entanto, não é uma tarefa trivial. Dessa forma, a originalidade do projeto está na criação e disponibilização de um artefato para que qualquer cidadão em posse de um determinado dado possa então processá-lo e com isso obter informações e interpretá-las sem que um conhecimento de programação seja necessário.
 \subsection{Análise do Problema Proposto}
-A estratégia utilizada foi a filtragem por categorias de temas gerais, no caso de engenharia, sem especificação das disciplinas. 
+O problema é a inexistência de uma apresentação dos dados do sistema de saúde brasileiro de forma simples, intuitiva e de fácil acesso a população, mesmo existindo um grande volume de dados disponível. Dessa forma, o desafio é conseguir centralizar estes dados, interpretá-los e relacioná-los com aspectos externos e apresentá-los de forma simples, intuitiva e acessível para todos. 
 \subsection{Equipe}
+\begin{itemize}
+    \item Felipe Fonseca Rocha
+    \item Isaac Henrique Simões
+    \item Renata Nésio
+    \item Tiago Lobato Mansur
+\end{itemize}
+
 \subsubsection{Habilidades}
+\begin{itemize}
+   \item Felipe Fonseca Rocha
+   \begin{itemize}
+     \item Desenvolvimento de software
+     \item Arquitetura \textit{Cloud Computing}
+     \item DevOps e infraestrutura
+     \item Arquitetura de Software
+   \end{itemize}
+
+    \item Isaac Henrique Simões
+    \begin{itemize}
+        \item Análise de dados
+        \item Modelagem de matemática
+    \end{itemize}
+
+    \item Renata Nésio
+   \begin{itemize}
+     \item Programação
+     \item Machine learning 
+     \item Gestão de projetos
+     \item Análise de dados
+   \end{itemize}
+
+   \item Tiago Lobato Mansur
+   \begin{itemize}
+     \item Desenvolvimento de software
+     \item Gestão de equipe
+   \end{itemize}
+
+\end{itemize}
 \subsubsection{Responsabilidades}
+\begin{itemize}
+   \item Felipe Fonseca Rocha
+   \begin{itemize}
+     \item Aplicação da metodologia CML
+     \item Gerenciamento de Infraestrutura
+     \item Gerenciamento dos Pipelines
+     \item Extração e limpeza dos dados
+     \item Gerenciamento do repositório
+     \item Automação de tarefas 
+   \end{itemize}
+   
+   \item Isaac Henrique Simões
+   \begin{itemize}
+       \item Codificação
+   \end{itemize}
+   
+    \item Renata Nésio
+   \begin{itemize}
+     \item Aplicação da metodologia CML
+    \item Análise de dados obtidos
+     \item Extração de dados
+     \item Gestão do projeto
+     \item Automação de tarefas 
+
+   \end{itemize}
+   
+   \item Tiago Lobato Mansur
+   \begin{itemize}
+     \item Centralização e tradução dos dados
+     \item Gestão da equipe
+   \end{itemize}
+\end{itemize}
 \subsection{Analise de Viabilidade}
+
+Para avaliar a viabilidade do projeto, foi elaborado um gráfico de Gantt, apresentado na Fig.\ref{fig:Gantt}.
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[height=4cm,keepaspectratio=true]{docs/Cronograma.PNG}
+    \caption{Cronograma com gráfico de Gantt}
+    \label{fig:Gantt}
+    \centering
+\end{figure}
+
+Dados os prazos estabelecidos, que são, por ora, uma aproximação  do tempo necessário para cada tarefa, a realização das tarefas propostas parece viável até o momento.
+
+
+\section{estudo de anterioridade} 
+% ####################################
+As doenças respiratórias juntamente com as cardiovasculares, cânceres e diabetes, são as doenças não transmissíveis (DNT) que mais matam hoje.
+O Fórum das Sociedades Respiratórias Internacionais (FIRS) aborda a relação que existe nas doenças respiratórias e o meio ambiente. A queima de combustíveis, a poluição de fontes industriais e a fumaça do tabaco contribuem para a maioria das condições respiratórias \cite{firs}.
+
+A infecção respiratória aguda do trato inferior é causa de aproximadamente 4 milhões de mortes por ano e são a principal causa de morte em crianças abaixo de 5 anos. É uma causa particularmente importante de morte em países de baixa e média renda. Entre as 30 causas mais comum de morte, a infecção é a quarta \cite{firs}.
+
+As  doenças  respiratórias  são influenciadas por queimadas e os efeitos de inversões térmicas que concentram a poluição, impactando diretamente a qualidade do ar, principalmente nas áreas urbanas \cite{mudanças}.
+
+A variação de respostas humanas relacionadas às mudanças  climáticas  parece  estar  diretamente  associada às  questões  de  vulnerabilidade  individual  e  coletiva. Variáveis  como  idade,  perfil  de  saúde,  resiliência  fisiológica e condições sociais contribuem diretamente para  as  respostas  humanas  relacionadas  às  variáveis climáticas.  Alguns  estudos também  apontam  que  alguns  fatores  que  aumentam a  vulnerabilidade  dos  problemas  climáticos  são  uma combinação  de  crescimento  populacional,  pobreza  e degradação  ambiental \cite{mudanças}.
+
+As  condições  atmosféricas  podem  influenciar  o  transporte  de  microrganismos,  assim  como  de  poluentes oriundos de fontes fixas e móveis e a produção de pólen. Os efeitos das mudanças climáticas podem ser potencializados, dependendo das características físicas e químicas dos poluentes e das características climáticas como temperatura, umidade e precipitação. Essas características definem o tempo de residência dos poluentes na atmosfera, podendo ser transportados a  longas  distâncias  em  condições  favoráveis  de  altas temperaturas  e  baixa  umidade.  As alterações de temperatura, umidade e o regime de chuvas podem aumentar os efeitos das doenças respiratórias, assim como alterar as condições de exposição aos poluentes atmosféricos  \cite{mudanças}.
+
+Em áreas urbanas alguns efeitos da exposição a poluentes  atmosféricos  são  potencializados  quando  ocorrem alterações  climáticas,  principalmente  as  inversões  térmicas.  Isto  se  verifica  em  relação  a  asma,  alergias,  infecções bronco-pulmonares e infecções das vias aéreas superiores  (sinusite),  principalmente  nos  grupos  mais susceptíveis, que incluem as crianças menores de 5 anos e indivíduos maiores de 65 anos de idade \cite{mudanças}.
+
+Segundo a OMS, 50\% das doenças respiratórias crônicas e 60\% das doenças respiratórias agudas estão associadas à exposição a poluentes atmosféricos. A maioria dos estudos relacionando os níveis de poluição do ar com efeitos à saúde foram desenvolvidos em áreas metropolitanas, incluindo  as  grandes  capitais  da  Região  Sudeste  no  Brasil,  e mostram associação da carga de morbimortalidade por doenças  respiratórias,  com  incremento  de  poluentes atmosféricos,  especialmente  de  material  particulado. O tamanho da partícula, superfície e a composição química do material particulado determinam o risco para a saúde humana \cite{mudanças}.
+
+As emissões gasosas e de material particulado para a atmosfera derivam principalmente de veículos, indústrias e da queima de biomassa. No Brasil, as fontes estacionárias  e  grandes  frotas  de  veículos  concentram-se nas áreas metropolitanas localizadas principalmente na Região Sudeste, enquanto a queima de biomassa ocorre em maior extensão e intensidade na Amazônia Legal \cite{mudanças}.
+
+Alguns estudos evidenciam que a associação entre altas temperaturas e elevadas concentrações de poluentes  atmosféricos  pode  gerar  um  incremento  das  hospitalizações,  atendimentos  de  emergência,  consumo de medicamentos e taxas de mortalidade \cite{mudanças}.
+
+Outro ponto importante que deve ser levado em conta para diminuir as mortes por doenças respiratórias é o investimento do governo tanto na prevenção quanto no tratamento.\cite{mudanças}.
+
+Para podermos entender quais medidas podem ser tomadas para reduzir o número de doenças respiratórias temos como exemplo o estudo que compara a mortalidade por doenças respiratórias em idosos após campanhas vacinais contra influenza no Distrito Federa. Nesse estudo foi feito uma análise da mortalidade por doenças respiratórias de três faixas estarias diferentes, 60 à 69 anos,70 à 79 anos e 80 anos ou mais. Os resultados mostraram uma diminuição na mortalidade para cada 1000 habitantes significativa, principalmente na faixa etária mais velha, com o índice passando de 30\% para 20\% de 1996 para 2000. Isso demonstra a importância de medidas preventivas para combater essas doenças, e a importância também de realizar um estudo de dados para saber o impacto das medidas que foram realizadas.     \cite{mudanças}.
+
+
+\subsection{contribuição do projeto ao estado da arte}
+Este projeto não possui um estado da arte muito claro de referência, pois é o conjunto da integração de dados do SUS, orçamentos do governo, limpeza e combinação de banco de dados, aprendizado de maquina e pipeline de geração de resultados. \cite{mudanças}.
+
+Levando em consideração os dados do SUS, orçamentos do governo e aprendizado de maquina podemos considerar o estudo "Uso de Machine Learning para predição de pacientes de alto custo no Sistema Único de Saúde (SUS)". Mesmo não tratando de doenças respiratórias especificamente e não tendo um pipeline de geração de resultados este estudo representa em seu resultado grande parte do que buscamos atingir com o projeto, que é relacionar o orçamento do governo com as doenças respiratórias e identificar os principais atributos que influenciam nessa relação. \cite{mudanças}.
+
+No estudo inicialmente é realizada a seleção, obtenção, exploração e processamento dos dados, criando assim um banco de dados pre-processado e pronto para a analise do aprendizado de maquina. Em seguida esses dados são utilizados em três algoritmos de aprendizado de máquina supervisionado para geração dos resultados. Após os resultados foi possível analisar quais fatores influenciam mais no alto custo do SUS.   \cite{mudanças}.
+
+Neste projeto a ideia é seguir a mesma linha de raciocínio do estudo citado, mas o foco será apenas em doenças respiratórias e na relação com o orçamento do governo. No entanto, a grande contribuição para o estado da arte é a criação de um Pipeline de desenvolvimento onde será possível analisar a relação de quaisquer dados mudando apenas      \cite{mudanças}.
+% ###################################3
+
+\section{Motivação} 
+Com já mencionado no trabalho anteriormente, foram apresentadas, algumas das motivações que guiam a aplicação deste trabalho. 
+No ano de 2020, a pandemia do COVID-19 demonstrou o quanto temas que inicialmente não são apresentados como componentes da discussão sobre saúde pública ficaram evidenciados como fundamentais nessa discussão. Porém isso apenas evidenciou essas relações e suas importâncias. Essa discussão é muitos mais ampla do que apresentada nessa sessão, mas ficam, abaixo, introduzidos a
+\subsection{Socio-economia}
+A saúde não é mais como um questão apenas individual, ou ainda uma questão de decisão pessoal. A saúde é uma questão coletiva \cite{saude_coletiva} que perpassa pela percepção individual, mas que deve ser sempre orientada ao coletivo, sendo que aspectos individuais, como padrões de higiene, comportamentais, e até mesmo de uso de medicamentos, podem afetar ou contribuir para o estado, ou situação de saúde de uma comunidade, e essa por sua vez interferirem no estado e/ou condição de saúde de outras comunidades.
+Por esse motivo, existem dois aspectos econômicos \cite{saude_forca_trabalho} que são afetados diretamente pelo estado e/ou condição de saúde coletiva de uma comunidade. Sendo o primeiro aspecto a disponibilidade da força de trabalho dessa comunidade, e outra é o gasto publico para contenção, tratamento e remediação das condições.
+\subsection{Ambiental}
+O conceito de saúde pública e coletiva se estende para além das competências médicas, terapêuticas, farmacológico e/ou fisiológicos, conceitos conhecidos popularmente como saúde mental e saúde ambiental são subáreas, dessa grande área do conhecimento.
+Segundo a OMS a saúde ambiental é o campo de atuação da saúde pública que se ocupa das formas de vida, das substâncias e das condições em torno do ser humano, que podem exercer alguma influência sobre a sua saúde e o seu bem-estar \cite{ms_oms} ambiente relacionado a saúde esta no contexto de proteção da saúde pública. 
+\subsection{Políticos}
+O conjunto de ações públicas é que determinam como o sistema de saúde de um comunidade acontece. Mas ações públicas não se limitam aos dizeres políticos, mas muito além disso. O comportamento e a postura da comunidade com relação ao seu estado e/ou condição de saúde são determinantes. 
+O SUS é uma das maiores conquistas populares, não pelo fato de ser um sistema de saúde público e gratuito, mas sim por não ter partido dos órgãos públicos e instituições governamentais, mas sim  da organização e debate público junto a população. Pautado em decisões técnicas de profissionais atuantes na reforma sanitarista. \cite{o_que_e_sus}
+
+\section{Abrangência, restrições e potencial}
+\subsection{Abrangência}
+O trabalho em si tem um escopo limitado a uma avaliação temporal do investimento dedicado ao SUS e sua relação com a taxa de mortalidade por doenças respiratórias aguadas graves. 
+A principal discussão levantada é a apresentação de uma metodologia de trabalho ágil e relativamente leve, mas  fundamentada para discussão dos dados disponibilizados pelo Governo Brasileiro, tentando contextualizar e viabilizar a atuação cidadã da massa intelectual ativa do nosso país com relação a fiscalização e entendimento dos recursos empregados pelo governo em benefício de seu povo.
+
+\subsection{restrições}
+Data a limitação de tempo disponível para elaboração e discussão do trabalho, ainda somando-se a restrição de integrantes do time de desenvolvimento e profundidade de conhecimento específico no tema abordado, o trabalho prima pela proposta de discussão e formatação do trabalho, não buscando explorar a base de dados a exaustão, mas mostrando a viabilidade de sua exploração, já com algumas técnicas de limpeza da base e formatação para análise disponibilizadas em formato público e irrestrito, salvo para uso particulares ou de interesses próprios, como fundamentado pelas 4 liberdades de software livre \cite{gnu} discutido inicialmente pelo fundador da GNU, Richard Matthew Stallman, e hoje defendido também pela FSF (Free Software Foundation).
+
+\subsection{Potencial}
+A ideia é habilitar e incentivar que a academia bem como seus alunos a exercitarem sua cidadania e seu compromisso para com o bem público e além do difícil dever que é elucidar e debater de forma embasada e estruturada conceitos e temáticas de interesses comuns, dando transparência e uma discussão sadia a respeito do que esta sendo feito.
+
+\section{Relevância do projeto}
+Existe uma diferença entre dados e informação. Dados podem estar disponíveis, mas se não há uma analise confiável e de qualidade a informação contida neles não está acessível.
+
+A partir do momento dados públicos estão disponibilizados pelo poder público é necessário que haja engajamento da população apta a tornar essa informação acessível para a população média. A informação acessível que habilita a população a fiscalizar e a intervir na forma como o governo conduz e distribuí sua riqueza.
+
+Dados brutos não apresentam qualquer relevância para sociedade, especialmente a dotada de menos ferramentas para avaliação desses. O potencial do trabalho uma vez que engajado um corpo técnico apto a analisar os dados e torna-los acessível é habilitar a população a melhor acompanhar a situação do país e de seus governantes.
+
+\section{Estudo de Viabilidade}
+
+O estudo de viabilidade do projeto permeia por 2 entidades com a proposta de valor apresentada:
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[height=4cm,keepaspectratio=true]{docs/BM.png}
+    \caption{Business Model Canvas}
+    \label{fig:BM}
+    \centering
+\end{figure}
+
+Considerando fornecedores e clientes como entidades, detalha se abaixo as duas entidades.
+\subsection{Fornecedores}
+Os fornecedores podem ser divididos em duas grandes classes, sendo elas:
+\begin{itemize}
+    \item serviços (Cloud / IaaS) - plataforma e infraestrutura de troca de informações.
+    \item voluntários (profissionais) - Produção de conhecimento, plataformas e analises de dados
+\end{itemize}
+
+\subsection{Clientes}
+Podem ser divididos em 2 grupos, sendo elas:
+\begin{itemize}
+    \item Público - Reconhecendo o valor do grupo e da produção de conhecimento, poderia solicitar analises para melhor entendimento das situações diversas do governo.
+    \item Privado - Esse ainda poderia ser divíduo em outros grupos sendo:
+    \begin{itemize}
+    \item População - acompanhando as informações mais acessíveis produzidas pelo grupo
+    \item Privado - Pesquisadores interessados nas propostas e métodos, bases geradas e artigos
+    \end{itemize}
+\end{itemize}
+Considerando o baixo engajamento em causas não financeiramente 
+
 % \write18{wget https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png}
 % \includegraphics{PNG_transparency_demonstration_1.png}
 
-\subsection{Artigos}
+% \subsection{Artigos}
 
 
-\section{Descrição do }
+% \section{Descrição do }
 
 
-\section{Resultados e análise}
+% \section{Resultados e análise}
 
-\begin{gather}
- y_{ij~visitados}
- =
-\begin{bmatrix}
-0 & 0 & 0 & 1 & 0\\
-1 & 0 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0\\
-0 & 1 & 0 & 0 & 0\\
-0 & 0 & 0 & 0 & 0
-   \end{bmatrix}
-\end{gather}
-
-
-\section{Conclusão}
+% \begin{gather}
+%  y_{ij~visitados}
+%  =
+% \begin{bmatrix}
+% 0 & 0 & 0 & 1 & 0\\
+% 1 & 0 & 0 & 0 & 0\\
+% 0 & 0 & 0 & 0 & 0\\
+% 0 & 1 & 0 & 0 & 0\\
+% 0 & 0 & 0 & 0 & 0
+%   \end{bmatrix}
+% \end{gather}
 
 
-Embora o
+% \section{Conclusão}
 
 
-\appendices
-\section{Algorítimo de testes}
-
-Anexo I - "ModeloOtimizaçãoLinearSimples.R"
-%\\Anexo II - "Tabela de testes.xlsx"
-
-\ifCLASSOPTIONcaptionsoff
-  \newpage
-\fi
+% Embora o
 
 
-\begin{thebibliography}{1}
+% \appendices
+% \section{Algorítimo de testes}
 
+% Anexo I - "ModeloOtimizaçãoLinearSimples.R"
+% %\\Anexo II - "Tabela de testes.xlsx"
 
-\bibitem{lin2014}
-	Lin, C.~, Choy, K. L., Ho, G. T. S., Chung, S. H., Lam, H. Y.~ (2014). 
-	Survey of green vehicle routing problem: ~Past and future trends.~ Expert Systems with Applications, 
-	~41(4),~ 1118–1138.
-	 https://doi.org/10.1016/j.eswa.2013.07.107.
-\bibitem{black1996}
-	Black, W. R. (1996). Sustainable transportation: a US perspective. Journal of Transport Geography, 4(3),
-151–159. https://doi.org/10.1016/0966-6923(96)00020-8.
-\bibitem{dieese2018}
-	DIEESE (2009). Metodologia de Cesta Básica de Alimentos. https://www.dieese.org.br/metodologia/metodologiaCestaBasica.pdf  ~\-~visitado em: 19 de Novembro de 2018.
-\bibitem{bruno2017} 
-Bruck P. B., Iori M.(2017)
-Non-Elementary Formulations for Single Vehicle Routing
-Problems with Pickups and Deliveries
-https://doi.org/10.1287/opre.2017.1639
-	
-\bibitem{luciana2011}
-Assis. P. L. · Maravilha L. A., Vivas. A, Campelo. F, Ramírez A. J.
-(2012) Multiobjective vehicle routing problem with fixed delivery and optional collections
-DOI 10.1007/s11590-012-0551-z
-
-\bibitem{Chiung2001} 
-Moon C., Kim. J, Choi G., Seo Y. (2001). An efficient genetic algorithm for the traveling salesman
-problem with precedence constraints.
-https://doi.org/10.1016/S0377-2217(01)00227-2
-\end{thebibliography}
-
-
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \ifCLASSOPTIONcaptionsoff
+%   \newpage
 % \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-% IEEEtran.cls defaults to using nonbold math in the Abstract.
-% This preserves the distinction between vectors and scalars. However,
-% if the journal you are submitting to favors bold math in the abstract,
-% then you can use LaTeX's standard command \boldmath at the very start
-% of the abstract to achieve this. Many IEEE journals frown on math
-% in the abstract anyway.
 
-% Note that keywords are not normally used for peerreview papers.
-% The only time the second header will appear is for the odd numbered pages
-% after the title page when using the twoside option.
-% 
-% *** Note that you probably will NOT want to include the author's ***
-% *** name in the headers of peer review papers.                   ***
-% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
-% you desire.
+\printbibliography
 
-
-
-
-% If you want to put a publisher's ID mark on the page you can do it like
-% this:
-%\IEEEpubid{0000--0000/00\$00.00~\copyright~2007 IEEE}
-% Remember, if you use this you must call \IEEEpubidadjcol in the second
-% column for its text to clear the IEEEpubid mark.
-
-
-
-% use for special paper notices
-%\IEEEspecialpapernotice{(Invited Paper)}
-
-
-
-
-% make the title area
-
-% note the % following the last \IEEEmembership and also \thanks - 
-% these prevent an unwanted space from occurring between the last author name
-% and the end of the author line. i.e., if you had this:
-% 
-% \author{....lastname \thanks{...} \thanks{...} }
-%                     ^------------^------------^----Do not want these spaces!
-%
-% a space would be appended to the last name and could cause every name on that
-% line to be shifted left slightly. This is one of those "LaTeX things". For
-% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
-% "AB" then you have to do: "\textbf{A}\textbf{B}"
-% \thanks is no different in this regard, so shield the last } of each \thanks
-% that ends a line with a % and do not let a space in before the next \thanks.
-% Spaces after \IEEEmembership other than the last one are OK (and needed) as
-% you are supposed to have spaces between the names. For what it is worth,
-% this is a minor point as most people would not even notice if the said evil
-% space somehow managed to creep in.
-
-
-
-% The paper headers
-
-% The very first letter is a 2 line initial drop letter followed
-% by the rest of the first word in caps.
-% 
-% form to use if the first word consists of a single letter:
-% \IEEEPARstart{A}{demo} file is ....
-% 
-% form to use if you need the single drop letter followed by
-% normal text (unknown if ever used by IEEE):
-% \IEEEPARstart{A}{}demo file is ....
-% 
-% Some journals put the first two words in caps:
-% \IEEEPARstart{T}{his demo} file is ....
-% 
-% Here we have the typical use of a "T" for an initial drop letter
-% and "HIS" in caps to complete the first word.
-%
-
-%% bare_jrnl.tex
-%% V1.3
-%% 2007/01/11
-%% by Michael Shell
-%% see http://www.michaelshell.org/
-%% for current contact information.
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.7 or later) with an IEEE journal paper.
-%%
-%% Support sites:
-%% http://www.michaelshell.org/tex/ieeetran/
-%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
-%% and
-%% http://www.ieee.org/
-
-
-
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. IEEE's font choices can trigger bugs that do  ***
-% *** not appear when using other class files.                            ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
-
-%%*************************************************************************
-%% Legal Notice:
-%% This code is offered as-is without any warranty either expressed or
-%% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
-%% User assumes all risk.
-%% In no event shall IEEE or any contributor to this code be liable for
-%% any damages or losses, including, but not limited to, incidental,
-%% consequential, or any other damages, resulting from the use or misuse
-%% of any information contained here.
-%%
-%% All comments are the opinions of their respective authors and are not
-%% necessarily endorsed by the IEEE.
-%%
-%% This work is distributed under the LaTeX Project Public License (LPPL)
-%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
-%% distributed and modified. A copy of the LPPL, version 1.3, is included
-%% in the base LaTeX documentation of all distributions of LaTeX released
-%% 2003/12/01 or later.
-%% Retain all contribution notices and credits.
-%% ** Modified files should be clearly indicated as such, including  **
-%% ** renaming them and changing author support contact information. **
-%%
-%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
-%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
-%%*************************************************************************
-
-% Note that the a4paper option is mainly intended so that authors in
-% countries using A4 can easily print to A4 and see how their papers will
-% look in print - the typesetting of the document will not typically be
-% affected with changes in paper size (but the bottom and side margins will).
-% Use the testflow package mentioned above to verify correct handling of
-% both paper sizes by the user's LaTeX system.
-%
-% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
-% should be used if it is desired that the figures are to be displayed in
-% draft mode.
-%
-% If IEEEtran.cls has not been installed into the LaTeX system files,
-% manually specify the path to it like:
-% \documentclass[journal]{../sty/IEEEtran}
-
-
-
-
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
-
-
-% *** CITATION PACKAGES ***
-%
-%\usepackage{cite}
-% cite.sty was written by Donald Arseneau
-% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
-% \cite{} output to follow that of IEEE. Loading the cite package will
-% result in citation numbers being automatically sorted and properly
-% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
-% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
-% \cite will automatically add leading space, if needed. Use cite.sty's
-% noadjust option (cite.sty V3.8 and later) if you want to turn this off.
-% cite.sty is already installed on most LaTeX systems. Be sure and use
-% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
-% not currently provide for hyperlinked citations.
-% The latest version can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
-% The documentation is contained in the cite.sty file itself.
-
-
-
-
-
-
-% *** GRAPHICS RELATED PACKAGES ***
-%
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at: 
-% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
-% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
-
-
-
-
-
-% *** MATH PACKAGES ***
-%
-%\usepackage[cmex10]{amsmath}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics. If using
-% it, be sure to load this package with the cmex10 option to ensure that
-% only type 1 fonts will utilized at all point sizes. Without this option,
-% it is possible that some math symbols, particularly those within
-% footnotes, will be rendered in bitmap form which will result in a
-% document that can not be IEEE Xplore compliant!
-%
-% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
-
-
-
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
-% There is also a support site at:
-% http://algorithms.berlios.de/index.html
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
-
-
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
-
-
-%\usepackage{mdwmath}
-%\usepackage{mdwtab}
-% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
-% especially mdwmath.sty and mdwtab.sty which are used to format equations
-% and tables, respectively. The MDWtools set is already installed on most
-% LaTeX systems. The lastest version and documentation is available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-%\usepackage{eqparbox}
-% Also of notable interest is Scott Pakin's eqparbox package for creating
-% (automatically sized) equal width boxes - aka "natural width parboxes".
-% Available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
-
-
-
-
-
-% *** SUBFIGURE PACKAGES ***
-%\usepackage[tight,footnotesize]{subfigure}
-% subfigure.sty was written by Steven Douglas Cochran. This package makes it
-% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
-% work, it is a good idea to load it with the tight package option to reduce
-% the amount of white space around the subfigures. subfigure.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at:
-% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
-% subfigure.sty has been superceeded by subfig.sty.
-
-
-
-%\usepackage[caption=false]{caption}
-%\usepackage[font=footnotesize]{subfig}
-% subfig.sty, also written by Steven Douglas Cochran, is the modern
-% replacement for subfigure.sty. However, subfig.sty requires and
-% automatically loads Axel Sommerfeldt's caption.sty which will override
-% IEEEtran.cls handling of captions and this will result in nonIEEE style
-% figure/table captions. To prevent this problem, be sure and preload
-% caption.sty with its "caption=false" package option. This is will preserve
-% IEEEtran.cls handing of captions. Version 1.3 (2005/06/28) and later 
-% (recommended due to many improvements over 1.2) of subfig.sty supports
-% the caption=false option directly:
-%\usepackage[caption=false,font=footnotesize]{subfig}
-%
-% The latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
-% The latest version and documentation of caption.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
-
-
-
-
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure. The latest version and documentation can be found at:
-% http://www.ctan.org/tex-archive/macros/latex/base/
-
-
-
-%\usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
-% Documentation is contained in the stfloats.sty comments as well as in the
-% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
-% does not allow \baselineskip to stretch. Authors submitting work to the
-% IEEE should note that IEEE rarely uses double column equations and
-% that authors should try to avoid such use. Do not be tempted to use the
-% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
-% not format its papers in such ways.
-
-
-%\ifCLASSOPTIONcaptionsoff
-%  \usepackage[nomarkers]{endfloat}
-% \let\MYoriglatexcaption\caption
-% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
-%\fi
-% endfloat.sty was written by James Darrell McCauley and Jeff Goldberg.
-% This package may be useful when used in conjunction with IEEEtran.cls'
-% captionsoff option. Some IEEE journals/societies require that submissions
-% have lists of figures/tables at the end of the paper and that
-% figures/tables without any captions are placed on a page by themselves at
-% the end of the document. If needed, the draftcls IEEEtran class option or
-% \CLASSINPUTbaselinestretch interface can be used to increase the line
-% spacing as well. Be sure and use the nomarkers option of endfloat to
-% prevent endfloat from "marking" where the figures would have been placed
-% in the text. The two hack lines of code above are a slight modification of
-% that suggested by in the endfloat docs (section 8.3.1) to ensure that
-% the full captions always appear in the list of figures/tables - even if
-% the user used the short optional argument of \caption[]{}.
-% IEEE papers do not typically make use of \caption[]'s optional argument,
-% so this should not be an issue. A similar trick can be used to disable
-% captions of packages such as subfig.sty that lack options to turn off
-% the subcaptions:
-% For subfig.sty:
-% \let\MYorigsubfloat\subfloat
-% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
-% For subfigure.sty:
-% \let\MYorigsubfigure\subfigure
-% \renewcommand{\subfigure}[2][\relax]{\MYorigsubfigure[]{#2}}
-% However, the above trick will not work if both optional arguments of
-% the \subfloat/subfig command are used. Furthermore, there needs to be a
-% description of each subfigure *somewhere* and endfloat does not add
-% subfigure captions to its list of figures. Thus, the best approach is to
-% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
-% and instead reference/explain all the subfigures within the main caption.
-% The latest version of endfloat.sty and its documentation can obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/endfloat/
-%
-% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
-% later in the document, say, to conditionally put the References on a 
-% page by themselves.
-
-
-
-
-
-% *** PDF, URL AND HYPERLINK PACKAGES ***
-%
-%\usepackage{url}
-% url.sty was written by Donald Arseneau. It provides better support for
-% handling and breaking URLs. url.sty is already installed on most LaTeX
-% systems. The latest version can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
-% Read the url.sty source comments for usage information. Basically,
-% \url{my_url_here}.
-
-
-
-
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-% (Unless specifically asked to do so by the journal or conference you plan
-% to submit to, of course. )
-
-
-% correct bad hyphenation here
-% needed in second column of first page if using \IEEEpubid
-%\IEEEpubidadjcol
-
-% you can choose not to have a title for an appendix
-% if you want by leaving the argument blank
-
-% use section* for acknowledgement
-
-
-% Can use something like this to put references on a page
-% by themselves when using endfloat and the captionsoff option.
-% An example of a floating figure using the graphicx package.
-% Note that \label must occur AFTER (or within) \caption.
-% For figures, \caption should occur after the \includegraphics.
-% Note that IEEEtran v1.7 and later has special internal code that
-% is designed to preserve the operation of \label within \caption
-% even when the captionsoff option is in effect. However, because
-% of issues like this, it may be the safest practice to put all your
-% \label just after \caption rather than within \caption{}.
-%
-% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
-% option should be used if it is desired that the figures are to be
-% displayed while in draft mode.
-%
-%\begin{figure}[!t]
-%\centering
-%\includegraphics[width=2.5in]{myfigure}
-% where an .eps filename suffix will be assumed under latex, 
-% and a .pdf suffix will be assumed for pdflatex; or what has been declared
-% via \DeclareGraphicsExtensions.
-%\caption{Simulation Results}
-%\label{fig_sim}
-%\end{figure}
-
-% Note that IEEE typically puts floats only at the top, even when this
-% results in a large percentage of a column being occupied by floats.
-
-
-% An example of a double column floating figure using two subfigures.
-% (The subfig.sty package must be loaded for this to work.)
-% The subfigure \label commands are set within each subfloat command, the
-% \label for the overall figure must come after \caption.
-% \hfil must be used as a separator to get equal spacing.
-% The subfigure.sty package works much the same way, except \subfigure is
-% used instead of \subfloat.
-%
-%\begin{figure*}[!t]
-%\centerline{\subfloat[Case I]\includegraphics[width=2.5in]{subfigcase1}%
-%\label{fig_first_case}}
-%\hfil
-%\subfloat[Case II]{\includegraphics[width=2.5in]{subfigcase2}%
-%\label{fig_second_case}}}
-%\caption{Simulation results}
-%\label{fig_sim}
-%\end{figure*}
-%
-% Note that often IEEE papers with subfigures do not employ subfigure
-% captions (using the optional argument to \subfloat), but instead will
-% reference/describe all of them (a), (b), etc., within the main caption.
-
-
-% An example of a floating table. Note that, for IEEE style tables, the 
-% \caption command should come BEFORE the table. Table text will default to
-% \footnotesize as IEEE normally uses this smaller font for tables.
-% The \label must come after \caption as always.
-%
-%\begin{table}[!t]
-%% increase table row spacing, adjust to taste
-%\renewcommand{\arraystretch}{1.3}
-% if using array.sty, it might be a good idea to tweak the value of
-% \extrarowheight as needed to properly center the text within the cells
-%\caption{An Example of a Table}
-%\label{table_example}
-%\centering
-%% Some packages, such as MDW tools, offer better commands for making tables
-%% than the plain LaTeX2e tabular which is used here.
-%\begin{tabular}{|c||c|}
-%\hline
-%One & Two\\
-%\hline
-%Three & Four\\
-%\hline
-%\end{tabular}
-%\end{table}
-
-
-% Note that IEEE does not put floats in the very first column - or typically
-% anywhere on the first page for that matter. Also, in-text middle ("here")
-% positioning is not used. Most IEEE journals use top floats exclusively.
-% Note that, LaTeX2e, unlike IEEE journals, places footnotes above bottom
-% floats. This can be corrected via the \fnbelowfloat command of the
-% stfloats package.
-
-% if have a single appendix:
-%\appendix[Proof of the Zonklar Equations]
-% or
-%\appendix  % for no appendix heading
-% do not use \section anymore after \appendix, only \section*
-% is possibly needed
-
-% use appendices with more than one appendix
-% then use \section to start each appendix
-% you must declare a \section before using any
-% \subsection or using \label (\appendices by itself
-% starts a section numbered zero.)
-%
-
-% trigger a \newpage just before the given reference
-% number - used to balance the columns on the last page
-% adjust value as needed - may need to be readjusted if
-% the document is modified later
-%\IEEEtriggeratref{8}
-% The "triggered" command can be changed if desired:
-%\IEEEtriggercmd{\enlargethispage{-5in}}
-
-% references section
-
-% can use a bibliography generated by BibTeX as a .bbl file
-% BibTeX documentation can be easily obtained at:
-% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
-% The IEEEtran BibTeX style support page is at:
-% http://www.michaelshell.org/tex/ieeetran/bibtex/
-%\bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-%\bibliography{IEEEabrv,../bib/paper}
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
-
-
-
-
-% biography section
-% 
-% If you have an EPS/PDF photo (graphicx package needed) extra braces are
-% needed around the contents of the optional argument to biography to prevent
-% the LaTeX parser from getting confused when it sees the complicated
-% \includegraphics command within an optional argument. (You could create
-% your own custom macro containing the \includegraphics command to make things
-% simpler here.)
-%\begin{biography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
-% or if you just want to reserve a space for a photo:
-
-%\begin{IEEEbiography}{Michael Shell}
-%Biography text here.
-%\end{IEEEbiography}
-
-
-
-% You can push biographies down or up by placing
-% a \vfill before or after them. The appropriate
-% use of \vfill depends on what kind of text is
-% on the last page and whether or not the columns
-% are being equalized.
-
-%\vfill
-
-% Can be used to pull up biographies so that the bottom of the last one
-% is flush with the other column.
-%\enlargethispage{-5in}
-
-
-
-% that's all folks
 \end{document}
