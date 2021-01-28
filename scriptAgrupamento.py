@@ -15,16 +15,16 @@ size = 10;
 ano_inicio = 2009
 teste2 = [0] * size
 pd.options.display.float_format = '{:,.0f}'.format
-colsEnum=['CS_RACA','CS_SEXO']
+colsEnum=['CS_RACA','CS_SEXO','CS_GESTANT','CRITERIO']
 dadosTratadas = []
 
 dados = pd.read_csv("data/datasus/influd09_limpo_final.csv",sep=';',encoding = "ISO-8859-1")
 
 for num,col in enumerate(colsEnum, start=1):
-    enum = pd.read_csv("data/datasus/{}.csv".format(col),sep=';',encoding = "ISO-8859-1").columns
+    enum = pd.read_csv("data/{}.csv".format(col),sep=';',encoding = "ISO-8859-1").columns
     dadosIter = dados
     enumTipo = dados[col]
-    dadosIter[col] = dadosIter[col].fillna(0)
+    dadosIter[col] = dadosIter[col].fillna(9)
     dadosIter[col] = dadosIter[col].astype('category')
     
     
@@ -48,4 +48,4 @@ for num,col in enumerate(colsEnum, start=1):
 df_final = reduce(lambda left,right: pd.merge(left,right,on='ID_MUNICIP'), dadosTratadas).astype(int)
 df_final.reset_index(level=0, inplace=True)
 #result = pd.concat(teste2)
-df_final.to_csv(r'data/datasus/dados_agrupados.csv', index = False,sep=';')
+df_final.to_csv(r'data/dados_agrupados.csv', index = False,sep=';')
