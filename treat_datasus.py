@@ -12,7 +12,6 @@ from typing import Tuple, List
 import pandas as pd
 from unidecode import unidecode
 
-
 ###
 # Configure logs
 ###
@@ -180,81 +179,70 @@ def get_location_code_data(cities_path: str, uf_path: str) -> Tuple[pd.DataFrame
     return read_csv_municipios(cities_path), read_csv_uf(uf_path)
 
 
-def consolidate_datasus():
-    with open(file=f'{current_director}/consolidated_datasus.csv', mode='w', newline='') as csvfile:
-        spamwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
-        datasus_length, new_datasus = funout_datasus_treat()
-
-        merged_datasus = None
-        for i in range(datasus_length + 1):
-            if i >= datasus_length:
-                merged_datasus = merged_datasus.append(new_datasus[i])
-                logger.info(f'Fim dos arquivos {i}')
-                break
-
-            difference = set(new_datasus[i].columns) ^ (set(new_datasus[i + 1].columns))
-
-            new_datasus[i] = new_datasus[i].drop(columns=difference, errors='ignore')
-            new_datasus[i + 1] = new_datasus[i + 1].drop(columns=difference, errors='ignore')
-
-            if i == 0:
-                merged_datasus = new_datasus[i].copy()
-            else:
-                merged_datasus = merged_datasus.append(new_datasus[i], ignore_index=True)
-
-            logger.info(f'{i}, {i + 1}: length {len(new_datasus[i])}, {len(new_datasus[i + 1])}')
-            # logger.info(difference)
-            # logger.info(set(new_datasus[i].columns) ^ (set(new_datasus[i+1].columns)))
-            logger.info(f'Size merged {len(merged_datasus)} Index file {i}')
-            logger.info('')
-
-        # Log Brief data
-        logger.info(f'Colunas {merged_datasus.columns}')
-        logger.info(f'Tamanho do banco do SUS: {len(merged_datasus)}')
-        logger.info(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
-        logger.info(f'10 Ultimas linhas:\n {merged_datasus.tail(10)}')
-
-        # Retrieve data From auxiliar tables UF and Municipio
-        cod_municipio, cod_uf = get_location_code_data(municipios_file_path, uf_file_path)
-
-        # Brief Data
-        logger.info(cod_municipio.head(10))
-        logger.info(cod_uf.head(10))
-
-        # TODO - Get list from parameter
-        # Filter columns of interest
-        merged_datasus = merged_datasus[get_filter_datasus_columns()]
-        # Filter state MG
-        merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
-        # Replace code UF by Code UF Name
-        merged_datasus['SG_UF_NOT'].replace(dict(zip(cod_uf.cod_uf, cod_uf.sg_uf)), inplace=True)
-        # Replace Code Municipio by Code Municipio Name
-        merged_datasus['ID_MUNICIP'].replace(dict(zip(cod_municipio.cod_municipio, cod_municipio.nome_municipio)),
-                                             inplace=True)
-        # Ajusta date for consider only month
-        merged_datasus['DT_NOTIFIC'] = merged_datasus['DT_NOTIFIC'].apply(
-            lambda x: str(x)[3:])
-
-        # merged_datasus['TMP_ATE_OBITO'] = merged_datasus.apply( lambda row: (
-        #     sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
-        #                                                         axis=1 )
-
-        logger.info(merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head(10))
-
-        merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
-        # merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
-        merged_datasus.head()
-        logger.info(len(merged_datasus))
-
-        merged_datasus.to_csv(path_or_buf=csvfile, index=False)
-
-        logger.info("FINISH")
-    # with open(file=f'{os.getcwd()}/headers19') as headers:
-    #     read = (headers)
+def handler_datasus(merged_datasus):
+    datasus_length, new_datasus = funout_datasus_treat()
+    merged_datasus = clean_columns(datasus_length, merged_datasus, new_datasus)
+    # Log Brief data
+    logger.info(f'Colunas \n {merged_datasus.columns}')
+    logger.info(f'Tamanho do banco do SUS: {len(merged_datasus)}')
+    logger.info(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
+    logger.info(f'10 Ultimas linhas:\n {merged_datasus.tail(10)}')
+    # Retrieve data From auxiliar tables UF and Municipio
+    cod_municipio, cod_uf = get_location_code_data(municipios_file_path, uf_file_path)
+    # Brief Data
+    logger.info(f'Município \n {cod_municipio.head(10)}')
+    logger.info(f'Estados \n {cod_uf.head(10)}')
+    merged_datasus = filter_data(cod_municipio, cod_uf, merged_datasus)
+    merged_datasus.head()
+    logger.info(len(merged_datasus))
+    return merged_datasus
 
 
-def run_funout_datasus_process(sus_file: str) -> Tuple[str,pd.DataFrame]:
+def filter_data(cod_municipio, cod_uf, merged_datasus):
+    # TODO - Get list from parameter
+    # Filter columns of interest
+    merged_datasus = merged_datasus[get_filter_datasus_columns()]
+    # Filter state MG
+    merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
+    # Replace code UF by Code UF Name
+    merged_datasus['SG_UF_NOT'].replace(dict(zip(cod_uf.cod_uf, cod_uf.sg_uf)), inplace=True)
+    # Replace Code Municipio by Code Municipio Name
+    merged_datasus['ID_MUNICIP'].replace(dict(zip(cod_municipio.cod_municipio, cod_municipio.nome_municipio)),
+                                         inplace=True)
+    # Ajusta date for consider only month
+    merged_datasus['DT_NOTIFIC'] = merged_datasus['DT_NOTIFIC'].apply(
+        lambda x: str(x)[3:])
+    logger.info(merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head(10))
+    # Filter data only deaths
+    merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
+    # Time to death
+    # merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
+    return merged_datasus
+
+
+def clean_columns(datasus_length, merged_datasus, new_datasus):
+    for i in range(datasus_length + 1):
+        if i >= datasus_length:
+            merged_datasus = merged_datasus.append(new_datasus[i])
+            logger.info(f'Fim dos arquivos {i}')
+            break
+
+        difference = set(new_datasus[i].columns) ^ (set(new_datasus[i + 1].columns))
+
+        new_datasus[i] = new_datasus[i].drop(columns=difference, errors='ignore')
+        new_datasus[i + 1] = new_datasus[i + 1].drop(columns=difference, errors='ignore')
+
+        if i == 0:
+            merged_datasus = new_datasus[i].copy()
+        else:
+            merged_datasus = merged_datasus.append(new_datasus[i], ignore_index=True)
+
+        logger.info(f'{i}, {i + 1}: length {len(new_datasus[i])}, {len(new_datasus[i + 1])}')
+        logger.info(f'Size merged {len(merged_datasus)} Index file {i}')
+    return merged_datasus
+
+
+def run_funout_datasus_process(sus_file: str) -> Tuple[str, pd.DataFrame]:
     database_per_year = read_db_file_csv(f'{current_director}/data/datasus/{sus_file}')
     database = database_per_year.rename(columns={'DT_OBITO': 'DT_EVOLUCA'})
     database['EVOLUCAO'] = database['EVOLUCAO'].apply(
@@ -277,3 +265,22 @@ def funout_datasus_treat():
     datasus_length = len(new_datasus) - 1
 
     return datasus_length, new_datasus
+
+
+def consolidate_datasus():
+    with open(file=f'{current_director}/data/staged_data/consolidated_datasus.csv', mode='w', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        merged_datasus = None
+
+        merged_datasus = handler_datasus(merged_datasus)
+
+        merged_datasus.to_csv(path_or_buf=csvfile, index=False)
+
+        logger.info("FINISH")
+
+    # merged_datasus['TMP_ATE_OBITO'] = merged_datasus.apply( lambda row: (
+    #     sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
+    #                                                         axis=1 )
+    # with open(file=f'{os.getcwd()}/headers19') as headers:
+    #     read = (headers)

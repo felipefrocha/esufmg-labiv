@@ -30,7 +30,7 @@ def create_splited_columns():
     colsEnum=['CS_RACA','CS_SEXO','CS_GESTANT','CRITERIO']
     dadosTratadas = []
 
-    dados = pd.read_csv("consolidated_datasus.csv",sep=',',encoding = "ISO-8859-1")
+    dados = pd.read_csv("data/staged_data/consolidated_datasus.csv",sep=',',encoding = "ISO-8859-1")
 
     for num,col in enumerate(colsEnum, start=1):
         logger.info(col)
@@ -57,4 +57,4 @@ def create_splited_columns():
     #horizontal_stack = pd.concat([survey_sub, survey_sub_last10], axis=1)
     df_final = reduce(lambda left,right: pd.merge(left,right,on=['ID_MUNICIP','DT_NOTIFIC','SG_UF_NOT']), dadosTratadas).astype(int)
     df_final.reset_index(level=0, inplace=True)
-    df_final.to_csv(r'data/dados_agrupados.csv', index = True,sep=';')
+    df_final.to_csv(r'data/staged_data/dados_agrupados.csv', index = True,sep=';')
