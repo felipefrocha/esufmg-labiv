@@ -26,7 +26,7 @@ def read_db_file_csv(path):
 
 def read_csv_municipios():
     cod_municipio = None
-    with open( file=f'{datasus_path}/data/cod_municipio.csv', mode='r', newline='' ) as file_cod_municipio:
+    with open( file=f'{datasus_path}/data/cod_municipio.csv', mode='r', newline='', encoding='utf-8' ) as file_cod_municipio:
         cod_municipio = pd.read_csv( file_cod_municipio, delimiter=',', low_memory=False )
         cod_municipio['Código Município Completo'] = cod_municipio['Código Município Completo'].apply(
             lambda x: int( str( x )[0:6] ) )
@@ -163,31 +163,30 @@ if __name__ == "__main__":
         merged_datasus['DT_NOTIFIC'] = merged_datasus['DT_NOTIFIC'].apply(
             lambda x: str( x )[3:] )
 
-        merged_datasus['TMP_ATE_OBITO'] = merged_datasus.apply( lambda row: (
-            sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
-                                                                axis=1 )
+#        merged_datasus['TMP_ATE_OBITO'] = merged_datasus.apply( lambda row: (
+#            sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
+#                                                                axis=1 )
 
         print( merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head( 10 ) )
 
         merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
-        merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
+        #merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
         merged_datasus.head()
         print( len( merged_datasus ) )
         # merged_datasus.to_csv( path_or_buf=csvfile, index=False )
-        teste = merged_datasus.groupby( by=[
-            "DT_NOTIFIC",
-            "ID_MUNICIP",
-            "SG_UF_NOT",
-            "CS_SEXO",
-            "CS_RACA",
-            "CS_GESTANT",
-        ], dropna=False ).agg(
-            {'DT_NOTIFIC': ['count'], 'CS_RACA': ['count'], 'CS_SEXO': ['count'], 'EVOLUCAO': ['sum'],
-             'TMP_ATE_OBITO': ['mean']} ).sort_index()
+#        teste = merged_datasus.groupby( by=[
+#            "DT_NOTIFIC",
+#            "ID_MUNICIP",
+#            "SG_UF_NOT",
+#            "CS_SEXO",
+#            "CS_RACA",
+#            "CS_GESTANT",
+#        ], dropna=False ).agg(
+#            {'DT_NOTIFIC': ['count'], 'CS_RACA': ['count'], 'CS_SEXO': ['count'], 'EVOLUCAO': ['sum'],
+#             'TMP_ATE_OBITO': ['mean']} ).sort_index()
 
-        teste.to_csv( path_or_buf=csvfile, index=True )
+        merged_datasus.to_csv( path_or_buf=csvfile, index=False )
 
-        print( teste )
 
         print( "FINISH" )
     # with open(file=f'{os.getcwd()}/headers19') as headers:
