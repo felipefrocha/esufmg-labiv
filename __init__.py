@@ -1,3 +1,5 @@
+from typing import Callable
+
 from scriptAgrupamento import *
 from treat_datasus import *
 from orcamento_mg import *
@@ -14,7 +16,7 @@ logging.basicConfig(format=FORMAT)
 # END - Configure logs
 ###
 
-def run_routine(data: str, routine):
+def run_routine(data: str, routine: Callable):
     log.info(f'Consolidating {data} Files')
     routine()
     log.info(f'{data} Files Consolidated')
