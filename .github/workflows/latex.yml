@@ -1,12 +1,43 @@
 name: Build LaTeX document
 on: [push]
 jobs:
-  build_latex:
+#  build_latex:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Set up Git repository
+#        uses: actions/checkout@v2
+#      - name: Compile LaTeX document
+#        uses: xu-cheng/latex-action@master
+#        with:
+#          root_file: docs/main.tex
+
+  build-docker:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
-      - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@master
-        with:
-          root_file: docs/main.tex
+      - name: Build Image
+        run: docker build -t felipefrocha89/esufmg:labiv .
+      - name: Test Image
+        run:  docker run --rm -it -v $PWD:/app -w /app felipefrocha89/esufmg:labiv __init__.py
+      - name: Validate result
+        run: (wc -w data/staged_data/dataliked.csv | grep 1) || exit 1
+      - name: Deploy Docker
+        run: echo {{ secrets.DOCKER_PASSWD }} | docker login -u felipefrocha89 --password-stdin
+
+
+  cml:
+    runs-on: ubuntu-latest
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: cml_run
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pip install -r requirements.txt
+          python __init__.py
+
+#          cat metrics.txt >> report.md
+#          cml-publish confusion_matrix.png --md >> report.md
+#          cml-send-comment report.md
