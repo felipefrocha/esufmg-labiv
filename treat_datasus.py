@@ -153,7 +153,7 @@ if __name__ == "__main__":
             "UTI",
         ]]
 
-        # merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
+        merged_datasus = merged_datasus[merged_datasus["SG_UF_NOT"] == 31]
 
         merged_datasus['SG_UF_NOT'].replace( dict( zip( cod_uf.cod_uf, cod_uf.sg_uf ) ), inplace=True )
 
