@@ -8,6 +8,19 @@ import numpy as np
 import csv
 
 import pandas as pd
+
+###
+# Configure logs
+###
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+FORMAT = '%(asctime)-15s %(clientip)s %(user)-8s %(message)s'
+logging.basicConfig(format=FORMAT)
+###
+# END - Configure logs
+###
+
+
 pd.options.display.float_format = "{:.2f}".format
 size = 10;
 ano_inicio = 2009

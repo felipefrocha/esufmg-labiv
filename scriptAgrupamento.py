@@ -4,11 +4,24 @@ Created on Tue Dec 22 20:45:01 2020
 
 @author: tiago
 """
+import logging
+
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
 from functools import reduce
 enc = OneHotEncoder(handle_unknown='ignore')
+
+###
+# Configure logs
+###
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=FORMAT)
+###
+# END - Configure logs
+###
 
 def create_splited_columns():
     size = 10;
@@ -20,7 +33,7 @@ def create_splited_columns():
     dados = pd.read_csv("consolidated_datasus.csv",sep=',',encoding = "ISO-8859-1")
 
     for num,col in enumerate(colsEnum, start=1):
-        print(col)
+        logger.info(col)
         enum = pd.read_csv("data/{}.csv".format(col),sep=';',encoding = "ISO-8859-1").columns
         dadosIter = dados
         enumTipo = dados[col]

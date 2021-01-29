@@ -3,6 +3,7 @@
 """
 
 import csv
+import logging
 import multiprocessing
 import os
 from datetime import date
@@ -10,6 +11,19 @@ from typing import Tuple, List
 
 import pandas as pd
 from unidecode import unidecode
+
+
+###
+# Configure logs
+###
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(format=FORMAT)
+###
+# END - Configure logs
+###
+
 
 current_director = os.getcwd()
 municipios_file_path = 'data/cod_municipio.csv'
@@ -176,7 +190,7 @@ def consolidate_datasus():
         for i in range(datasus_length + 1):
             if i >= datasus_length:
                 merged_datasus = merged_datasus.append(new_datasus[i])
-                print(f'Fim dos arquivos {i}')
+                logger.info(f'Fim dos arquivos {i}')
                 break
 
             difference = set(new_datasus[i].columns) ^ (set(new_datasus[i + 1].columns))
@@ -189,24 +203,24 @@ def consolidate_datasus():
             else:
                 merged_datasus = merged_datasus.append(new_datasus[i], ignore_index=True)
 
-            print(f'{i}, {i + 1}: length {len(new_datasus[i])}, {len(new_datasus[i + 1])}')
-            # print(difference)
-            # print(set(new_datasus[i].columns) ^ (set(new_datasus[i+1].columns)))
-            print(f'Size merged {len(merged_datasus)} Index file {i}')
-            print('')
+            logger.info(f'{i}, {i + 1}: length {len(new_datasus[i])}, {len(new_datasus[i + 1])}')
+            # logger.info(difference)
+            # logger.info(set(new_datasus[i].columns) ^ (set(new_datasus[i+1].columns)))
+            logger.info(f'Size merged {len(merged_datasus)} Index file {i}')
+            logger.info('')
 
         # Log Brief data
-        print(f'Colunas {merged_datasus.columns}')
-        print(f'Tamanho do banco do SUS: {len(merged_datasus)}')
-        print(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
-        print(f'10 Ultimas linhas:\n {merged_datasus.tail(10)}')
+        logger.info(f'Colunas {merged_datasus.columns}')
+        logger.info(f'Tamanho do banco do SUS: {len(merged_datasus)}')
+        logger.info(f'10 Primeiras linhas:\n {merged_datasus.head(10)}')
+        logger.info(f'10 Ultimas linhas:\n {merged_datasus.tail(10)}')
 
         # Retrieve data From auxiliar tables UF and Municipio
         cod_municipio, cod_uf = get_location_code_data(municipios_file_path, uf_file_path)
 
         # Brief Data
-        print(cod_municipio.head(10))
-        print(cod_uf.head(10))
+        logger.info(cod_municipio.head(10))
+        logger.info(cod_uf.head(10))
 
         # TODO - Get list from parameter
         # Filter columns of interest
@@ -226,16 +240,16 @@ def consolidate_datasus():
         #     sub_date( row['DT_INTERNA'], row['DT_EVOLUCA'] ) if row['EVOLUCAO'] == 1 else None),
         #                                                         axis=1 )
 
-        print(merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head(10))
+        logger.info(merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head(10))
 
         merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
         # merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
         merged_datasus.head()
-        print(len(merged_datasus))
+        logger.info(len(merged_datasus))
 
         merged_datasus.to_csv(path_or_buf=csvfile, index=False)
 
-        print("FINISH")
+        logger.info("FINISH")
     # with open(file=f'{os.getcwd()}/headers19') as headers:
     #     read = (headers)
 
@@ -245,7 +259,7 @@ def run_funout_datasus_process(sus_file: str) -> Tuple[str,pd.DataFrame]:
     database = database_per_year.rename(columns={'DT_OBITO': 'DT_EVOLUCA'})
     database['EVOLUCAO'] = database['EVOLUCAO'].apply(
         lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO)
-    print(f'Tamanho do arquivo {sus_file}: {len(database)}')
+    logger.info(f'Tamanho do arquivo {sus_file}: {len(database)}')
     return sus_file, database
 
 
