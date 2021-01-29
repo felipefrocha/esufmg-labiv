@@ -3,6 +3,7 @@ from typing import Callable
 from scriptAgrupamento import *
 from treat_datasus import *
 from orcamento_mg import *
+from data_linkage import *
 ###
 # Configure logs
 ###
@@ -32,4 +33,5 @@ if __name__ == "__main__":
     log.info('Consolidating Budgeting')
     create_splited_columns()
     log.info('Budget Consolidated')
+    import_files()
     exit(0)

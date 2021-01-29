@@ -19,8 +19,16 @@ logging.basicConfig(format=FORMAT)
 # END - Configure logs
 ###
 
-def consolidate_budget():
+budget_columns = {
+    "MUNICIPIO": "ID_MUNICIP",
+    "DATA OB": "DT_NOTIFIC",
+    "Valor Total": "VALOR_TOT",
+    "Valor Minimo": "VALOR_MIN",
+    "Valor maximo": "VALOR_MAX"
+}
 
+
+def consolidate_budget():
     pd.options.display.float_format = "{:.2f}".format
     size = 10;
     ano_inicio = 2009
@@ -44,4 +52,5 @@ def consolidate_budget():
         ano_inicio = ano_inicio + 1
 
     result = pd.concat(teste2)
-    result.to_csv(r'data/staged_data/orcamento_mg_consolidado.csv', index=False, sep=';')
+    result.rename(columns=budget_columns, inplace=True)
+    result.to_csv(r'data/staged_data/orcamento_mg_consolidado.csv', index=False, sep=',')
