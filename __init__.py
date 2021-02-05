@@ -26,8 +26,11 @@ def run_routine(data: str, routine: Callable):
 if __name__ == "__main__":
     log.info('Initializing routines')
 
+    
+
     processes = [multiprocessing.Process(target=run_routine, args=('Data Sus', consolidate_datasus,),daemon=False)
                 ,multiprocessing.Process(target=run_routine, args=("Data Budget", consolidate_budget,),daemon=False)]
+
     [res.start() for res in processes]
     [res.join() for res in processes]
     log.info('Consolidating Budgeting')
