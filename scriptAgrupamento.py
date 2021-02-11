@@ -28,10 +28,10 @@ def create_splited_columns():
     ano_inicio = 2009
     pd.options.display.float_format = '{:,.0f}'.format
     colsEnum=['CS_RACA','CS_SEXO','CS_GESTANT','CRITERIO']
+    colsGroup=['EVOLUCAO','PNEUMOPATI','UTI','HOSPITAL']
     dadosTratadas = []
 
     dados = pd.read_csv("data/staged_data/consolidated_datasus.csv",sep=',',encoding = "ISO-8859-1")
-
     for num,col in enumerate(colsEnum, start=1):
         logger.info(col)
         enum = pd.read_csv("data/{}.csv".format(col),sep=';',encoding = "ISO-8859-1").columns
@@ -47,14 +47,32 @@ def create_splited_columns():
         dadosIter = dadosIter.join(enc_df)
 
         dicionario = dict([(i, ['sum'])for i in enum])
+        print(dicionario)
         rnm_cols = dict(sum='Sum')
         grouped_single = dadosIter.groupby(['ID_MUNICIP','DT_NOTIFIC','SG_UF_NOT']).agg(dicionario).rename(columns=rnm_cols)
 
 
         grouped_single.columns = enum
         dadosTratadas.append(grouped_single)
+        
+    for num,col in enumerate(colsGroup, start=1):
+        colunaNome=[col]
+        logger.info(col)
+        dadosIter = dados
+        dadosIter[col] = dadosIter[col].fillna(9)
+        print(col)
+        print(colunaNome)
+        
+        dicionario2 = dict([(i, ['sum'])for i in colunaNome])
+        print(dicionario)
+        rnm_cols = dict(sum='Sum')
+        grouped_single = dadosIter.groupby(['ID_MUNICIP','DT_NOTIFIC','SG_UF_NOT']).agg(dicionario2).rename(columns=rnm_cols)
 
+        grouped_single.columns = colunaNome
+        dadosTratadas.append(grouped_single)
+    
     #horizontal_stack = pd.concat([survey_sub, survey_sub_last10], axis=1)
     df_final = reduce(lambda left,right: pd.merge(left,right,on=['ID_MUNICIP','DT_NOTIFIC','SG_UF_NOT']), dadosTratadas).astype(int)
     df_final.reset_index(level=0, inplace=True)
     df_final.to_csv(r'data/staged_data/dados_agrupados.csv', index = True,sep=',')
+

@@ -39,7 +39,12 @@ OBITO = 1
 NAO_OBITO = 0
 CURA = 1
 IGNORADO = 9
-
+SIM=1
+NAO = 2
+NAO_PNEUMOPATI = 0
+NAO_HOSPITAL = 0
+NAO_UTI = 0
+NAO_APLICA = 5
 
 def read_db_file_csv(path: str) -> pd.DataFrame:
     """
@@ -214,7 +219,7 @@ def filter_data(cod_municipio, cod_uf, merged_datasus):
         lambda x: str(x)[3:])
     logger.info(merged_datasus[['SG_UF_NOT', 'ID_MUNICIP']].head(10))
     # Filter data only deaths
-    merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
+    #merged_datasus = merged_datasus[merged_datasus['EVOLUCAO'] > 0]
     # Time to death
     # merged_datasus = merged_datasus[merged_datasus['TMP_ATE_OBITO'] > 0]
     return merged_datasus
@@ -247,6 +252,14 @@ def run_funout_datasus_process(sus_file: str) -> Tuple[str, pd.DataFrame]:
     database = database_per_year.rename(columns={'DT_OBITO': 'DT_EVOLUCA'})
     database['EVOLUCAO'] = database['EVOLUCAO'].apply(
         lambda x: NAO_OBITO if x == IGNORADO or x == CURA or x is None else OBITO)
+    database['PNEUMOPATI'] = database['PNEUMOPATI'].apply(
+        lambda x: NAO_PNEUMOPATI if x == IGNORADO or x == NAO or x is None else SIM)
+    database['HOSPITAL'] = database['HOSPITAL'].apply(
+        lambda x: NAO_HOSPITAL if x == IGNORADO or x == NAO or x is None else SIM)
+    database['UTI'] = database['UTI'].apply(
+        lambda x: NAO_UTI if x == IGNORADO or x == NAO or x is None else SIM)
+    database['CS_ESCOL_N'] = database['CS_ESCOL_N'].apply(
+        lambda x: IGNORADO if x == NAO_APLICA or x is None else x)
     logger.info(f'Tamanho do arquivo {sus_file}: {len(database)}')
     return sus_file, database
 
