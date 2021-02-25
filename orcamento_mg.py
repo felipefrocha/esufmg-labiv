@@ -54,3 +54,4 @@ def consolidate_budget():
     result = pd.concat(teste2)
     result.rename(columns=budget_columns, inplace=True)
     result.to_csv(r'data/staged_data/orcamento_mg_consolidado.csv', index=False, sep=',')
+
