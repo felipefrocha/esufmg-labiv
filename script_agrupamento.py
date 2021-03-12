@@ -77,4 +77,3 @@ def create_splited_columns():
     df_final['MORTALIDADE'] = ((df_final['EVOLUCAO']) / (df_final['MASCULINO'] + df_final['IGNORADO_SEXO'] + df_final['FEMININO'])).astype(float)  
     df_final.to_csv(r'data/staged_data/dados_agrupados.csv', index = True,sep=',')
 
-create_splited_columns()

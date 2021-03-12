@@ -11,19 +11,19 @@ jobs:
 #        with:
 #          root_file: docs/main.tex
 
-  build-docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up Git repository
-        uses: actions/checkout@v2
-      - name: Build Image
-        run: docker build -t felipefrocha89/esufmg:labiv .
-      - name: Test Image
-        run:  docker run --rm -i -v $PWD:/app -w /app felipefrocha89/esufmg:labiv
-      - name: Validate result
-        run: (wc -w data/staged_data/dataliked.csv | grep 1) || exit 1
-      - name: Deploy Docker
-        run: echo {{ secrets.DOCKER_PASSWD }} | docker login -u felipefrocha89 --password-stdin
+  # build-docker:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up Git repository
+  #       uses: actions/checkout@v2
+  #     - name: Build Image
+  #       run: docker build -t felipefrocha89/esufmg:labiv .
+  #     - name: Test Image
+  #       run:  docker run --rm -i -v $PWD:/app -w /app felipefrocha89/esufmg:labiv
+  #     - name: Validate result
+  #       run: (wc -w data/staged_data/dataliked.csv | grep 1) || exit 1
+  #     - name: Deploy Docker
+  #       run: echo {{ secrets.DOCKER_PASSWD }} | docker login -u felipefrocha89 --password-stdin
 
 
 #  cml:
