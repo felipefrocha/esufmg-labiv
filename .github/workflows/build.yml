@@ -1,8 +1,9 @@
 name: Build
 
-on: 
+on:
   push:
-    - master
+    branches:
+      - main
 jobs:
   build_latex:
     runs-on: ubuntu-latest
