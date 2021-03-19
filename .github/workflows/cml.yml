@@ -1,5 +1,5 @@
 
-name: deploy_cml
+name: Analysis
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  run:
+  analysis_cml:
     runs-on: [ubuntu-latest]
  
     steps:
@@ -45,7 +45,6 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-
           cat>>report.md<<EOF
           # CML Report facts
           ## Imagens por ano de análise
