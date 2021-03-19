@@ -32,6 +32,6 @@ jobs:
    
       - name: Build Image
         run: docker build -t felipefrocha89/esufmg:labiv .
-            
+
       - name: Deploy Docker
-        run: echo {{ secrets.DOCKER_PASSWD }} | docker login -u felipefrocha89 --password-stdin
+        run: echo "{{ secrets.DOCKER_PASSWD }}" | docker login -u felipefrocha89 --password-stdin
