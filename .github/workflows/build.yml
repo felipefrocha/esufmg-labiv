@@ -31,12 +31,7 @@ jobs:
         uses: actions/checkout@v2
    
       - name: Build Image
-        run: |
-          mkdir -p data/staged_data
-          docker build -t felipefrocha89/esufmg:labiv .
-   
-      - name: Test Image
-        run:  docker run --rm -i -v $PWD:/app -w /app felipefrocha89/esufmg:labiv
-    
+        run: docker build -t felipefrocha89/esufmg:labiv .
+            
       - name: Deploy Docker
         run: echo {{ secrets.DOCKER_PASSWD }} | docker login -u felipefrocha89 --password-stdin
