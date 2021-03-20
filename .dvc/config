@@ -1,4 +1,6 @@
 [core]
-    remote = storage
+    remote = aws
 ['remote "storage"']
     url = gdrive://1iR-ej7FJos5cBmrhkmzNXGWBYH5taAjz
+['remote "aws"']
+    url = s3://esufmglabiv

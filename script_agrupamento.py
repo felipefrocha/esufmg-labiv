@@ -74,6 +74,6 @@ def create_splited_columns():
     #horizontal_stack = pd.concat([survey_sub, survey_sub_last10], axis=1)
     df_final = reduce(lambda left,right: pd.merge(left,right,on=['ID_MUNICIP','DT_NOTIFIC','SG_UF_NOT']), dadosTratadas).astype(int)
     df_final.reset_index(level=0, inplace=True)
-    df_final['MORTALIDADE'] = ((df_final['EVOLUCAO']) / (df_final['MASCULINO'] + df_final['IGNORADO_SEXO'] + df_final['FEMININO'])).astype(int)  
+    df_final['MORTALIDADE'] = ((df_final['EVOLUCAO']) / (df_final['MASCULINO'] + df_final['IGNORADO_SEXO'] + df_final['FEMININO'])).astype(float)  
     df_final.to_csv(r'data/staged_data/dados_agrupados.csv', index = True,sep=',')
 

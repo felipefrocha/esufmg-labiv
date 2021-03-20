@@ -1,0 +1,54 @@
+
+name: Analysis
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  analysis_cml:
+    runs-on: [ubuntu-latest]
+ 
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - uses: iterative/setup-cml@v1
+
+      - uses: iterative/setup-dvc@v1
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+
+      - name: DVC Pull
+        run: dvc pull
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Analysis
+        run: |
+          # Create data folder
+          mkdir -p data/staged_data
+          # Run Coe 
+          python3 __init__.py
+
+
+      - name: cml
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cat>>report.md<<EOF
+          # CML Report facts
+          ## Imagens por ano de análise
+          EOF
+          cml-publish teste_money.png --md >> report.md
+          cml-send-comment report.md
+
