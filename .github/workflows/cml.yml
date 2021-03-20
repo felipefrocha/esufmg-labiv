@@ -49,6 +49,6 @@ jobs:
           # CML Report facts
           ## Imagens por ano de análise
           EOF
-          cml-publish teste_money --md >> report.md
+          cml-publish teste_money.png --md >> report.md
           cml-send-comment report.md
 
