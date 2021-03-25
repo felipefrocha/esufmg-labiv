@@ -98,9 +98,9 @@ def analise_anual(ano_analise:int):
 	for i, txt in enumerate(municipios):
 		ax.annotate(txt, (X2[i], Y2[i]),fontsize=1)
 
-	plt.title('Truth or Bluff (Linear Regression)')
+	plt.title(f'Cidades ano - {ano_analise} - Mortalidade X Orçamento')
 	plt.xlabel('Mortalidade')
-	plt.ylabel('Variavel')
+	plt.ylabel('Orçamento')
 
 
 
@@ -157,9 +157,9 @@ def analise_main():
 	for i, txt in enumerate(municipios):
 		ax.annotate(txt, (X2[i], Y2[i]),fontsize=1)
 
-	plt.title('Truth or Bluff (Linear Regression)')
+	plt.title(f'Cidades, media total - Mortalidade X Orçamento')
 	plt.xlabel('Mortalidade')
-	plt.ylabel('Variavel')
+	plt.ylabel('Orçamento')
 
 
 
